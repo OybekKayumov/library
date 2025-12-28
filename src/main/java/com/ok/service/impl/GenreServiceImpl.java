@@ -18,6 +18,7 @@ public class GenreServiceImpl implements GenreService {
 
 	//!@Autowired
 	private final GenreRepo genreRepo;
+	private final GenreMapper genreMapper;
 
 	//!public GenreServiceImpl(GenreRepo genreRepo) {this.genreRepo = genreRepo;}
 
@@ -28,19 +29,20 @@ public class GenreServiceImpl implements GenreService {
 		//return genreRepo.save(genreDTO);
 
 		//todo_ convert to entity format
-		Genre genre = Genre.builder()
-						.code(genreDTO.getCode())
-						.name(genreDTO.getName())
-						.description(genreDTO.getDescription())
-						.displayOrder(genreDTO.getDisplayOrder())
-						.active(true)
-						.build();
-
-		if (genreDTO.getParentGenreId() != null) {
-			Genre parentGenre =
-							genreRepo.findById(genreDTO.getParentGenreId()).get();
-			genre.setParentGenre(parentGenre);
-		}
+//		Genre genre = Genre.builder()
+//						.code(genreDTO.getCode())
+//						.name(genreDTO.getName())
+//						.description(genreDTO.getDescription())
+//						.displayOrder(genreDTO.getDisplayOrder())
+//						.active(true)
+//						.build();
+//
+//		if (genreDTO.getParentGenreId() != null) {
+//			Genre parentGenre =
+//							genreRepo.findById(genreDTO.getParentGenreId()).get();
+//			genre.setParentGenre(parentGenre);
+//		}
+		Genre genre = genreMapper.toEntity(genreDTO);
 
 		Genre savedGenre = genreRepo.save(genre);
 
@@ -71,14 +73,14 @@ public class GenreServiceImpl implements GenreService {
 		//dto.setBookCount((long) (savedGenre.getBook));
 
 		//GenreDTO dto = GenreMapper.toDTO(savedGenre);
-		return GenreMapper.toDTO(savedGenre);
+		return genreMapper.toDTO(savedGenre);
 	}
 
 	@Override
 	public List<GenreDTO> getAllGenres() {
 		return genreRepo.findAll().stream()
 						//.map(genre -> GenreMapper.toDTO(genre))
-						.map(GenreMapper::toDTO)
+						.map(genreMapper::toDTO)
 						.collect(Collectors.toList());
 	}
 }
