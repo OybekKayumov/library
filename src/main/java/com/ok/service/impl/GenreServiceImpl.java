@@ -152,6 +152,4 @@ public class GenreServiceImpl implements GenreService {
 	public long getBookCountByGenre(Long genreId) {
 		return 0;
 	}
-
-	//* 1:20 min
 }
