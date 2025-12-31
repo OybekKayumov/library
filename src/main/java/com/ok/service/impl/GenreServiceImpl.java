@@ -1,5 +1,6 @@
 package com.ok.service.impl;
 
+import com.ok.exception.GenreException;
 import com.ok.mapper.GenreMapper;
 import com.ok.model.Genre;
 import com.ok.payload.dto.GenreDTO;
@@ -85,10 +86,12 @@ public class GenreServiceImpl implements GenreService {
 	}
 
 	@Override
-	public GenreDTO getGenreById(Long genreId) {
-		return genreRepo.findById(genreId).orElseThrow(
-						() -> new Exception("Genre not Found!")
+	public GenreDTO getGenreById(Long genreId) throws GenreException {
+		Genre genre = genreRepo.findById(genreId).orElseThrow(
+						() -> new GenreException("Genre not Found!")
 		);
+
+		return genreMapper.toDTO(genre);
 	}
 
 	@Override

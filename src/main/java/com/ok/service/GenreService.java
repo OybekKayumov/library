@@ -1,5 +1,6 @@
 package com.ok.service;
 
+import com.ok.exception.GenreException;
 import com.ok.model.Genre;
 import com.ok.payload.dto.GenreDTO;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,7 @@ public interface GenreService {
 
 	List<GenreDTO> getAllGenres();
 
-	GenreDTO getGenreById(Long genreId);
+	GenreDTO getGenreById(Long genreId) throws GenreException;
 
 	GenreDTO updateGenre(Long genreId, GenreDTO genre);
 
