@@ -108,28 +108,44 @@ public class GenreServiceImpl implements GenreService {
 	}
 
 	@Override
-	public void deleteGenre(Long genreId) {
+	public void deleteGenre(Long genreId) throws GenreException {
+		Genre existingGenre = genreRepo.findById(genreId).orElseThrow(
+						() -> new GenreException("Genre not found!")
+		);
 
+		existingGenre.setActive(false);
+		genreRepo.save(existingGenre);
 	}
 
 	@Override
-	public void hardDeleteGenre(Long genreId) {
+	public void hardDeleteGenre(Long genreId) throws GenreException {
+		Genre existingGenre = genreRepo.findById(genreId).orElseThrow(
+						() -> new GenreException("Genre not found!")
+		);
 
+		genreRepo.delete(existingGenre);
 	}
 
 	@Override
 	public List<GenreDTO> getAllActiveGenresWithSubGenres() {
-		return List.of();
+
+		List<Genre> topLevelGenres =
+						genreRepo.findByParentGenreIsNullAndActiveTrueOrderByDisplayOrderAsc();
+
+		return genreMapper.toDTOList(topLevelGenres);
 	}
 
 	@Override
 	public List<GenreDTO> getTopLevelGenres() {
-		return List.of();
+		List<Genre> topLevelGenres =
+						genreRepo.findByParentGenreIsNullAndActiveTrueOrderByDisplayOrderAsc();
+
+		return genreMapper.toDTOList(topLevelGenres);
 	}
 
 	@Override
 	public long getTotalActiveGenres() {
-		return 0;
+		return genreRepo.countByActiveTrue();
 	}
 
 	@Override
