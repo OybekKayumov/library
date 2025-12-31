@@ -83,4 +83,6 @@ public class GenreServiceImpl implements GenreService {
 						.map(genreMapper::toDTO)
 						.collect(Collectors.toList());
 	}
+
+	//* 1:20 min
 }
