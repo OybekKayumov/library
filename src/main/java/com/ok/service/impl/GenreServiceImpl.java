@@ -84,5 +84,45 @@ public class GenreServiceImpl implements GenreService {
 						.collect(Collectors.toList());
 	}
 
+	@Override
+	public GenreDTO getGenreById(Long genreId) {
+		return null;
+	}
+
+	@Override
+	public GenreDTO updateGenre(Long genreId, GenreDTO genre) {
+		return null;
+	}
+
+	@Override
+	public void deleteGenre(Long genreId) {
+
+	}
+
+	@Override
+	public void hardDeleteGenre(Long genreId) {
+
+	}
+
+	@Override
+	public List<GenreDTO> getAllActiveGenresWithSubGenres() {
+		return List.of();
+	}
+
+	@Override
+	public List<GenreDTO> getTopLevelGenres() {
+		return List.of();
+	}
+
+	@Override
+	public long getTotalActiveGenres() {
+		return 0;
+	}
+
+	@Override
+	public long getBookCountByGenre(Long genreId) {
+		return 0;
+	}
+
 	//* 1:20 min
 }
