@@ -95,8 +95,16 @@ public class GenreServiceImpl implements GenreService {
 	}
 
 	@Override
-	public GenreDTO updateGenre(Long genreId, GenreDTO genre) {
-		return null;
+	public GenreDTO updateGenre(Long genreId, GenreDTO genreDTO) throws GenreException {
+
+		Genre existingGenre = genreRepo.findById(genreId).orElseThrow(
+						() -> new GenreException("Genre not found!")
+		);
+
+		genreMapper.updateEntityFromDTO(genreDTO, existingGenre);
+		Genre updatedGenre = genreRepo.save(existingGenre);
+
+		return genreMapper.toDTO(updatedGenre);
 	}
 
 	@Override

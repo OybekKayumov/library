@@ -73,4 +73,26 @@ public class GenreMapper {
 
 		return genre;
 	}
+
+	public void updateEntityFromDTO(GenreDTO dto, Genre existingGenre) {
+		if (dto == null || existingGenre == null) {
+			return ;
+		}
+
+		existingGenre.setCode(dto.getCode());
+		existingGenre.setName(dto.getName());
+		existingGenre.setDescription(dto.getDescription());
+		existingGenre.setDisplayOrder(dto.getDisplayOrder() != null ?
+						dto.getDisplayOrder() : 0);
+
+		if (dto.getActive() != null) {
+			existingGenre.setActive(dto.getActive());
+		}
+
+		if (dto.getParentGenreId() != null) {
+
+			genreRepo.findById(dto.getParentGenreId())
+							 .ifPresent(existingGenre::setParentGenre);
+		}
+	}
 }
