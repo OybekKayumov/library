@@ -86,7 +86,9 @@ public class GenreServiceImpl implements GenreService {
 
 	@Override
 	public GenreDTO getGenreById(Long genreId) {
-		return null;
+		return genreRepo.findById(genreId).orElseThrow(
+						() -> new Exception("Genre not Found!")
+		);
 	}
 
 	@Override
