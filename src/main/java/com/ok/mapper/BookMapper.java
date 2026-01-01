@@ -75,6 +75,35 @@ public class BookMapper {
 		return book;
 	}
 
+	public void updateEntittyFromDTO(BookDTO dto, Book book) throws BookException {
+		if (dto == null || book == null) {
+			return;
+		}
 
+		book.setTitle(dto.getTitle());
+		book.setAuthor(dto.getAuthor());
+
+		if (dto.getGenreId() != null) {
+			Genre genre = genreRepo.findById(dto.getGenreId())
+							.orElseThrow(() -> new BookException(
+											"Genre with ID " + dto.getGenreId() + " not found"
+							));
+			book.setGenre(genre);
+		}
+
+		book.setPublisher(dto.getPublisher());
+		book.setPublishedDate(dto.getPublicationDate());
+		book.setLanguage(dto.getLanguage());
+		book.setPages(dto.getPages());
+		book.setDescription(dto.getDescription());
+		book.setTotalCopies(dto.getTotalCopies());
+		book.setAvailableCopies(dto.getAvailableCopies());
+		book.setPrice(dto.getPrice());
+		book.setCoverImageUrl(dto.getCoverImageUrl());
+
+		if (dto.getActive() != null) {
+			book.setActive(dto.getActive());
+		}
+	}
 
 }
