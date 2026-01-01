@@ -75,7 +75,7 @@ public class BookMapper {
 		return book;
 	}
 
-	public void updateEntittyFromDTO(BookDTO dto, Book book) throws BookException {
+	public void updateEntityFromDTO(BookDTO dto, Book book) throws BookException {
 		if (dto == null || book == null) {
 			return;
 		}

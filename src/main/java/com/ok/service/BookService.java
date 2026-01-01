@@ -1,5 +1,6 @@
 package com.ok.service;
 
+import com.ok.exception.BookException;
 import com.ok.payload.dto.BookDTO;
 import com.ok.payload.request.BookSearchRequest;
 import com.ok.payload.response.PageResponse;
@@ -8,15 +9,15 @@ import java.util.List;
 
 public interface BookService {
 
-	BookDTO createBook(BookDTO bookDTO);
+	BookDTO createBook(BookDTO bookDTO) throws BookException;
 
-	List<BookDTO> createBooksBulk();
+	List<BookDTO> createBooksBulk(List<BookDTO> bookDTOs) throws BookException;
 
-	BookDTO getBookById(Long bookId);
+	BookDTO getBookById(Long bookId) throws BookException;
 
-	BookDTO getBookByISBN(String isbn);
+	BookDTO getBookByISBN(String isbn) throws BookException;
 
-	BookDTO updateBook(Long bookId, BookDTO bookDTO);
+	BookDTO updateBook(Long bookId, BookDTO bookDTO) throws BookException;
 	void deleteBook(Long bookId);
 	void hardDeleteBook(Long bookId);
 
