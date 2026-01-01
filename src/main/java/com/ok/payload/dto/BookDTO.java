@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 @Builder
 public class BookDTO {
 
+	private Long id;
+
 	@NotBlank(message = "ISBN is mandatory!")
 	private String isbn;
 

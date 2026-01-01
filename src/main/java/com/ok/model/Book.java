@@ -39,7 +39,7 @@ public class Book {
 
 	private String publisher;
 
-	private LocalDate publishDate;
+	private LocalDate publishedDate;
 
 	private String language;
 

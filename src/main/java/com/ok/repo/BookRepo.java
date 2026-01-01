@@ -29,6 +29,12 @@ public interface BookRepo extends JpaRepository<Book,Long> {
 	Page<Book> searchBooksWithFilters(@Param("searchTerm") String searchTerm,
 	                                  @Param("genreId") Long genreId,
 	                                  @Param("availableOnly") boolean availableOnly,
-	                                  Pageable pageable);
+	                                  Pageable pageable
+	);
 
+	long countByActiveTrue();
+
+	@Query("select count(b) from Book b " +
+					"where b.availableCopies>0 and b.active=true")
+	long countAvailableBooks();
 }
