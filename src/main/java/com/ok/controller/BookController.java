@@ -80,6 +80,29 @@ public class BookController {
 						true));
 	}
 
+	@GetMapping
+	public ResponseEntity<PageResponse<BookDTO>> searchBooks(
+					@RequestParam(required = false) Long genreId,
+					@RequestParam(required = false, defaultValue = "false") Boolean availableOnly,
+					@RequestParam(defaultValue = "true") boolean activeOnly,
+					@RequestParam(defaultValue = "0") int page,
+					@RequestParam(defaultValue = "20") int size,
+					@RequestParam(defaultValue = "createdAt") String sortBy,
+					@RequestParam(defaultValue = "DESC") String sortDirection) {
+
+		BookSearchRequest searchRequest = new BookSearchRequest();
+		searchRequest.setGenreId(genreId);
+		searchRequest.setAvailableOnly(availableOnly);
+		searchRequest.setPage(page);
+		searchRequest.setSize(size);
+		searchRequest.setSortBy(sortBy);
+		searchRequest.setSortDirection(sortDirection);
+
+		PageResponse<BookDTO> books = bookService.searchBooksWithFilters(searchRequest);
+
+		return ResponseEntity.ok(books);
+	}
+
 	@PostMapping("/search")
 	public ResponseEntity<PageResponse<BookDTO>> advancedSearch(
 					@RequestBody BookSearchRequest searchRequest) {

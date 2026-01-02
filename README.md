@@ -71,3 +71,9 @@ postman:
             "coverImageUrl": "https://images.pexels.com",
             "active": true    
         }
+
+    get all Books
+    localhost:5000/api/books
+
+    get a Book by Id
+    localhost:5000/api/books/1

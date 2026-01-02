@@ -18,10 +18,10 @@ public interface BookRepo extends JpaRepository<Book,Long> {
 	//? book="java programming" - java, prog OK, progress not OK
 
 	@Query("select b from Book b where " +
-					":searchTerm is null OR " +
+					"(:searchTerm is null OR " +
 					"lower(b.title) like lower(concat ('%', :searchTerm, '%')) OR " +
 					"lower(b.author) like lower(concat ('%', :searchTerm, '%')) OR " +
-					"lower(b.isbn) like lower(concat ('%', :searchTerm, '%')) OR " +
+					"lower(b.isbn) like lower(concat ('%', :searchTerm, '%'))) AND " +
 					"(:genreId is null OR b.genre.id=:genreId) AND " +
 					"(:availableOnly = false OR b.availableCopies>0) AND " +
 					"b.active=true"
