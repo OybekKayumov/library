@@ -2,7 +2,9 @@ package com.ok.controller;
 
 import com.ok.exception.BookException;
 import com.ok.payload.dto.BookDTO;
+import com.ok.payload.request.BookSearchRequest;
 import com.ok.payload.response.ApiResponse;
+import com.ok.payload.response.PageResponse;
 import com.ok.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -78,4 +80,29 @@ public class BookController {
 						true));
 	}
 
+	@PostMapping("/search")
+	public ResponseEntity<PageResponse<BookDTO>> advancedSearch(
+					@RequestBody BookSearchRequest searchRequest) {
+
+		PageResponse<BookDTO> books =
+						bookService.searchBooksWithFilters(searchRequest);
+
+		return ResponseEntity.ok(books);
+	}
+
+	@GetMapping("/stats")
+	public ResponseEntity<BooksStatResponse> getBookStats() throws BookException {
+
+	}
+
+	public static class BooksStatResponse {
+
+		public long totalActiveBooks;
+		public long totalAvailableBooks;
+
+		public BooksStatResponse(long totalActiveBooks, long totalAvailableBooks) {
+			this.totalActiveBooks = totalActiveBooks;
+			this.totalAvailableBooks = totalAvailableBooks;
+		}
+	}
 }
