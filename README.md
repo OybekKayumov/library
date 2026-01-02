@@ -4,12 +4,12 @@ java full-stack project
 
 postman:
     get
-    localhost:5000/api/genres
-    localhost:5000/api/genres/top-level
-    localhost:5000/api/genres/1
+        localhost:5000/api/genres
+        localhost:5000/api/genres/top-level
+        localhost:5000/api/genres/1
 
     post
-    localhost:5000/api/genres/create
+        localhost:5000/api/genres/create
         {    
         "code": "Fiction",
         "name": "Fiction",
@@ -20,7 +20,7 @@ postman:
         }
 
     post GenreDTO
-    localhost:5000/api/genres/create
+        localhost:5000/api/genres/create
         {    
             "code": "Mystery",
             "name": "Mystery",
@@ -31,7 +31,7 @@ postman:
         }
 
     put - update
-    localhost:5000/api/genres/1
+        localhost:5000/api/genres/1
         {
         "id": 1,
         "code": "Non-Fiction",
@@ -54,7 +54,7 @@ postman:
         localhost:5000/api/genres/2/hard
 
     create a Book
-    localhost:5000/api/books
+        localhost:5000/api/books
         {    
             "isbn": "978-3-16-148410-0",
             "title": "The Art of Java Development",
@@ -73,10 +73,78 @@ postman:
         }
 
     get all Books
-    localhost:5000/api/books
+        localhost:5000/api/books
 
     get a Book by Id
-    localhost:5000/api/books/1
+        localhost:5000/api/books/1
 
     put - update the Book
-    localhost:5000/api/books/1
+        localhost:5000/api/books/1
+
+add spring security
+
+
+# 📚 Library Management System
+
+A full-stack Java + MySQL web application to manage book inventory, 
+borrowing activity, returns, and admin access control. 
+This project demonstrates real-world CRUD operations, secure login, and 
+session-based workflows in a self-contained library system.
+
+---
+
+## 🔧 Features
+
+- 🔐 Admin login/logout system (session-based)
+- ➕ Add new books to the inventory
+- 📖 View books with author, genre & date
+- 📦 Issue books to students
+- 📥 Return books and mark as available
+- 📋 View issued logs with real-time status (Issued/Returned)
+- 📊 Dashboard with total, issued & returned book stats
+- 🌓 Dark mode toggle
+- 📱 Mobile responsive layout
+- 🚀 Optional deployment using 
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** HTML, CSS (vanilla)
+- **Backend:** Java, Spring 4.x
+- **Database:** MySQL (via MyAdmin)
+- **Local Server:** Tomcat
+- **Version Control:** Git + GitHub
+
+---
+
+## 📸 Screenshots
+
+> 📌 _Here are a few screenshots to give you a glimpse of the application:_
+
+### Dashboard
+![Dashboard showing book stats](screenshots/dashboard.png)
+
+---
+
+## 🧪 How to Run Locally
+
+1.  Install [Test](https://www.) or [XAMPP](https://www.)
+2.  Clone the repository:
+    ```bash
+    git clone [https://github.com/*/library.git]
+    (https://github.com/*/library.git)
+    ```
+3.  Move the project folder to your * `docs` or * `docs` directory.
+4.  Start Java & MySQL from *.
+5.  Import the SQL schema from `sql/database.sql` into MyAdmin.
+6.  Visit: `http://localhost:5000`
+    (Login with default credentials: `root` / `testtest` unless 
+    changed.)
+
+### 🛡️ Admin Credentials
+
+**Default:**
+```makefile
+Username: root
+Password: testtest
