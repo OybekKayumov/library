@@ -2,14 +2,13 @@ package com.ok.controller;
 
 import com.ok.exception.BookException;
 import com.ok.payload.dto.BookDTO;
+import com.ok.payload.response.ApiResponse;
 import com.ok.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,6 +34,48 @@ public class BookController {
 		List<BookDTO> createdBooks = bookService.createBooksBulk(bookDTOs);
 
 		return ResponseEntity.ok(createdBooks);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<BookDTO> getBookById(@PathVariable Long id) throws BookException {
+
+		BookDTO book = bookService.getBookById(id);
+		return ResponseEntity.ok(book);
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<BookDTO> updateBook(
+					@PathVariable Long id,
+					@Valid @RequestBody BookDTO bookDTO) throws BookException {
+
+		//try {
+
+			BookDTO updatedBook = bookService.updateBook(id, bookDTO);
+			return ResponseEntity.ok(updatedBook);
+
+//		} catch (BookException e) {
+//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//		}
+	}
+
+	@DeleteMapping("/{id}/permanent")
+	public ResponseEntity<ApiResponse> deleteBook(
+					@PathVariable Long id) throws BookException {
+
+		bookService.deleteBook(id);
+
+		return ResponseEntity.ok(new ApiResponse("Book deleted successfully",
+						true));
+	}
+
+	@DeleteMapping("/{id}/permanent")
+	public ResponseEntity<ApiResponse> hardDeleteBook(
+					@PathVariable Long id) throws BookException {
+
+		bookService.hardDeleteBook(id);
+
+		return ResponseEntity.ok(new ApiResponse("Book permanently deleted ",
+						true));
 	}
 
 }
