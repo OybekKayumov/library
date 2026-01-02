@@ -30,7 +30,7 @@ public class BookDTO {
 					message = "Author must be between 1 and 255 characters!")
 	private String author;
 
-	@NotBlank(message = "Genre is mandatory!")
+	@NotNull(message = "Genre is mandatory!")
 	private Long genreId;
 
 	private String genreName;
@@ -60,7 +60,7 @@ public class BookDTO {
 	@NotNull(message = "Available copies are mandatory")
 	private Integer availableCopies;
 
-	@DecimalMax(value = "0.0", inclusive = true,
+	@DecimalMin(value = "0.0", inclusive = true,
 					message = "Price cannot be negative")
 	@Digits(integer = 8, fraction = 2,
 					message = "Price must have at most 8 integer digits and 2 fractions")

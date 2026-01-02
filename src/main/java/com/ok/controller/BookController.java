@@ -60,7 +60,7 @@ public class BookController {
 //		}
 	}
 
-	@DeleteMapping("/{id}/permanent")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> deleteBook(
 					@PathVariable Long id) throws BookException {
 
@@ -91,8 +91,13 @@ public class BookController {
 	}
 
 	@GetMapping("/stats")
-	public ResponseEntity<BooksStatResponse> getBookStats() throws BookException {
+	public ResponseEntity<BooksStatResponse> getBookStats() {
 
+		long totalActive = bookService.getTotalActiveBooks();
+		long totalAvailable = bookService.getTotalAvailableBooks();
+
+		BooksStatResponse stats = new BooksStatResponse(totalActive, totalAvailable);
+		return ResponseEntity.ok(stats);
 	}
 
 	public static class BooksStatResponse {

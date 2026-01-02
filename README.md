@@ -52,3 +52,22 @@ postman:
         localhost:5000/api/genres/2
     hard
         localhost:5000/api/genres/2/hard
+
+    create a Book
+    localhost:5000/api/books
+        {    
+            "isbn": "978-3-16-148410-0",
+            "title": "The Art of Java Development",
+            "author": "John Doe",
+            "genreId": 1,
+            "publisher": "Mir",
+            "publicationDate": "2023-05-15",
+            "language": "English",
+            "pages": 420,    
+            "description": "A coomprehensive guide to mastering Java ...",
+            "totalCopies": 1,
+            "availableCopies": 1,
+            "price": 499.99,
+            "coverImageUrl": "https://images.pexels.com",
+            "active": true    
+        }
