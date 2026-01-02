@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -118,19 +119,17 @@ public class BookServiceImpl implements BookService {
 						pageable
 		);
 
-
-
-		return null;
+		return convertToPageResponse(bookPage);
 	}
 
 	@Override
 	public long getTotalActiveBooks() {
-		return 0;
+		return bookRepo.countByActiveTrue();
 	}
 
 	@Override
 	public long getTotalAvailableBooks() {
-		return 0;
+		return bookRepo.countAvailableBooks();
 	}
 
 	private Pageable createPageable(int page, int size, String sortBy, String sortDirection) {
@@ -143,5 +142,23 @@ public class BookServiceImpl implements BookService {
 
 		return PageRequest.of(page, size, sort);
 
+	}
+
+	private PageResponse<BookDTO> convertToPageResponse(Page<Book> books) {
+
+		List<BookDTO> bookDTOs = books.getContent()
+						.stream()
+						.map(bookMapper::toDTO)
+						.collect(Collectors.toList());
+
+		return new PageResponse<>(bookDTOs,
+						books.getNumber(),
+						books.getSize(),
+						books.getTotalElements(),
+						books.getTotalPages(),
+						books.isLast(),
+						books.isFirst(),
+						books.isEmpty()
+		);
 	}
 }
