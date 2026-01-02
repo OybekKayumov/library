@@ -77,3 +77,6 @@ postman:
 
     get a Book by Id
     localhost:5000/api/books/1
+
+    put - update the Book
+    localhost:5000/api/books/1
