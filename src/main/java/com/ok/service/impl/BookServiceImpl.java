@@ -10,6 +10,10 @@ import com.ok.repo.BookRepo;
 import com.ok.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -80,17 +84,42 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public void deleteBook(Long bookId) {
+	public void deleteBook(Long bookId) throws BookException {
 
+		Book existingBook = bookRepo.findById(bookId).orElseThrow(
+						() -> new BookException("Book not found!")
+		);
+
+		existingBook.setActive(false);
+		bookRepo.save(existingBook);
 	}
 
 	@Override
-	public void hardDeleteBook(Long bookId) {
+	public void hardDeleteBook(Long bookId) throws BookException {
+		Book existingBook = bookRepo.findById(bookId).orElseThrow(
+						() -> new BookException("Book not found!")
+		);
 
+		bookRepo.delete(existingBook);
 	}
 
 	@Override
 	public PageResponse<BookDTO> searchBooksWithFilters(BookSearchRequest searchRequest) {
+
+		Pageable pageable = createPageable(searchRequest.getPage(),
+						searchRequest.getSize(),
+						searchRequest.getSortBy(),
+						searchRequest.getSortDirection());
+
+		Page<Book> bookPage = bookRepo.searchBooksWithFilters(
+						searchRequest.getSearchTerm(),
+						searchRequest.getGenreId(),
+						searchRequest.getAvailableOnly(),
+						pageable
+		);
+
+
+
 		return null;
 	}
 
@@ -102,5 +131,17 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public long getTotalAvailableBooks() {
 		return 0;
+	}
+
+	private Pageable createPageable(int page, int size, String sortBy, String sortDirection) {
+
+		size = Math.min(size, 10);
+		size = Math.max(size, 1);
+
+		Sort sort = sortDirection.equalsIgnoreCase("ASC")
+						?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+
+		return PageRequest.of(page, size, sort);
+
 	}
 }
