@@ -9,16 +9,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
 @Service
-public class CustomUerServiceImpl implements UserDetailsService {
+public class CustomUserServiceImpl implements UserDetailsService {
 
 	private final UserRepo userRepo;
 
-	public CustomUerServiceImpl(UserRepo userRepo) {this.userRepo = userRepo;}
+	public CustomUserServiceImpl(UserRepo userRepo) {this.userRepo = userRepo;}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
