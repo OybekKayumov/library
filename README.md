@@ -87,6 +87,16 @@ add User
 
 add JWT token
 
+add admin role
+
+    localhost:5000/auth/signup
+    localhost:5000/auth/login
+        {       
+        "email": "testtest@gmail.com",    
+        "password": "testtest"    
+        }
+
+
 # 📚 Library Management System
 
 A full-stack Java + MySQL web application to manage book inventory, 
