@@ -11,6 +11,8 @@ import com.ok.payload.response.AuthResponse;
 import com.ok.repo.PasswordResetTokenRepo;
 import com.ok.repo.UserRepo;
 import com.ok.service.AuthService;
+import com.ok.service.EmailService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -32,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
 	private final JWTProvider jWTProvider;
 	private final CustomUserServiceImpl customUserServiceImpl;
 	private final PasswordResetTokenRepo passwordResetTokenRepo;
+	private final EmailService emailService;
 
 	@Override
 	public AuthResponse login(String username, String password) throws UserException {
@@ -106,10 +110,11 @@ public class AuthServiceImpl implements AuthService {
 		return response;
 	}
 
-	@Override
+	//@Override
+	@Transactional
 	public void createPasswordResetToken(String email) throws UserException {
 
-		String frontendUrl = "";
+		String frontendUrl = "http://localhost:5173";
 
 		User user = userRepo.findByEmail(email);
 
@@ -133,10 +138,29 @@ public class AuthServiceImpl implements AuthService {
 						" 5 minutes): " + resetLink;
 
 		//* send email
+		emailService.sendEmail(user.getEmail(), subject, body);
 	}
 
-	@Override
-	public void resetPassword(String token, String newPassword) {
+	//@Override
+	@Transactional
+	public void resetPassword(String token, String newPassword) throws Exception {
+
+		PasswordResetToken resetToken =
+						passwordResetTokenRepo.findByToken(token)
+										.orElseThrow(
+														() -> new Exception("Token not valid")
+										);
+
+		if (resetToken.isExpired()) {
+
+			passwordResetTokenRepo.delete(resetToken);
+			throw new Exception("Token is expired");
+		}
+
+		User user = resetToken.getUser();
+		user.setPassword(passwordEncoder.encode(newPassword));
+		userRepo.save(user);
+		passwordResetTokenRepo.delete(resetToken);
 
 	}
 }
