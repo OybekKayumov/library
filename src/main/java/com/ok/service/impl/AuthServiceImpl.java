@@ -1,7 +1,9 @@
 package com.ok.service.impl;
 
+import com.ok.config.JWTProvider;
 import com.ok.domain.UserRole;
 import com.ok.exception.UserException;
+import com.ok.mapper.UserMapper;
 import com.ok.model.User;
 import com.ok.payload.dto.UserDTO;
 import com.ok.payload.response.AuthResponse;
@@ -23,6 +25,7 @@ public class AuthServiceImpl implements AuthService {
 
 	private final UserRepo userRepo;
 	private final PasswordEncoder passwordEncoder;
+	private final JWTProvider jWTProvider;
 
 	@Override
 	public AuthResponse login(String username, String password) {
@@ -52,7 +55,15 @@ public class AuthServiceImpl implements AuthService {
 
 		SecurityContextHolder.getContext().setAuthentication(auth);
 
-		return null;
+		String jwt = jWTProvider.generateToken(auth);
+
+		AuthResponse response = new AuthResponse();
+		response.setJwt(jwt);
+		response.setTitle("Welcome " + createdUser.getFullName());
+		response.setMessage("Registered Successfully!");
+		response.setUser(UserMapper.toDTO(savedUser));
+
+		return response;
 	}
 
 	@Override
