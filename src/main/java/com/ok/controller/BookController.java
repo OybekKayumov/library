@@ -21,7 +21,7 @@ public class BookController {
 
 	private final BookService bookService;
 
-	@PostMapping
+	@PostMapping("/admin")
 	public ResponseEntity<BookDTO> createBook(@Valid @RequestBody BookDTO bookDTO) throws BookException {
 
 		BookDTO createdBook = bookService.createBook(bookDTO);
