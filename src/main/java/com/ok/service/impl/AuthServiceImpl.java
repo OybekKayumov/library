@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
 	public AuthResponse signup(UserDTO req) throws UserException {
 
 		User user = userRepo.findByEmail(req.getEmail());
-		if (user == null) {
+		if (user != null) {
 			throw new UserException("Email already registered!");
 		}
 

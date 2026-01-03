@@ -20,11 +20,14 @@ public class UserDTO {
 
 	@NotNull(message = "Password is required!")
 	private String password;
+
 	private String phone;
 
 	@NotNull(message = "Full Name is required!")
 	private String fullName;
+
 	private UserRole role;
+
 	private String username;
 
 	private LocalDateTime lastLogin;
