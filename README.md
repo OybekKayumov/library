@@ -98,6 +98,8 @@ add admin role
 
     localhost:5000/api/admin/books
 
+add User Service
+
 # 📚 Library Management System
 
 A full-stack Java + MySQL web application to manage book inventory, 

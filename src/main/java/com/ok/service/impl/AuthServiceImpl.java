@@ -41,6 +41,8 @@ public class AuthServiceImpl implements AuthService {
 	public AuthResponse login(String username, String password) throws UserException {
 
 		Authentication authentication = authenticate(username, password);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
 //		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 //		String role = authorities.iterator().next().getAuthority();
 		String token = jWTProvider.generateToken(authentication);
