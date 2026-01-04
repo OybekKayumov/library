@@ -30,7 +30,8 @@ public class SubscriptionPlanDTO {
 
 	@NotNull(message = "Price is mandatory!")
 	@Positive(message = "Price must be positive!")
-	private Integer price;
+	//private Integer price;
+	private Long price;
 
 	private String currency;
 
