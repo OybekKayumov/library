@@ -102,6 +102,8 @@ add User Service
 
     localhost:5000/api/users/profile
 
+add Subscription Plan
+
 
 # 📚 Library Management System
 
