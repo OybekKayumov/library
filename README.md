@@ -103,7 +103,44 @@ add User Service
     localhost:5000/api/users/profile
 
 add Subscription Plan
+    
+    localhost:5000/api/subscription-plans
 
+    localhost:5000/api/subscription-plans/admin/create
+
+        {
+        "planCode": "BASIC_30",
+        "name": "Basic 30 Days plan",
+        "description": "Access to basic features ...",
+        "durationDays": 30,
+        "price": 499.00,    
+        "maxBooksAllowed": 5,
+        "maxDaysPerBook": 7,
+        "displayOrder": 1,
+        "isActive": true,
+        "isFeatured": false,
+        "badgeText": "Popular",
+        "adminNotes": "Entry-level subscription plan"
+        }
+
+        {
+        "planCode": "PREMIUM_90",
+        "name": "Premium 90 Days plan",
+        "description": "Full access with higher limits",
+        "durationDays": 90,
+        "price": 1299.00,
+        "currency": "USD",    
+        "maxBooksAllowed": 20,
+        "maxDaysPerBook": 15,
+        "displayOrder": 2,
+        "isActive": true,
+        "isFeatured": false,
+        "badgeText": "Best Value",
+        "adminNotes": "Recommended plan"
+        }
+
+    update
+    localhost:5000/api/subscription-plans/admin/1
 
 # 📚 Library Management System
 

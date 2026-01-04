@@ -40,7 +40,7 @@ public class SubscriptionPlanController {
 
 	@PutMapping("/admin/{id}")
 	public ResponseEntity<?> updateSubscriptionPlan(
-					@Valid @RequestBody SubscriptionPlanDTO subscriptionPlanDTO,
+					@RequestBody SubscriptionPlanDTO subscriptionPlanDTO,
 					@PathVariable Long id) throws Exception {
 
 		SubscriptionPlanDTO plans =
