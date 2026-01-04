@@ -7,12 +7,12 @@ import java.util.List;
 
 public interface SubscriptionPlanService {
 
-	SubscriptionPlanDTO createSubscriptionPlan(SubscriptionPlanDTO planDTO);
+	SubscriptionPlanDTO createSubscriptionPlan(SubscriptionPlanDTO planDTO) throws Exception;
 
 	SubscriptionPlanDTO updateSubscriptionPlan(Long planId,
-	                                           SubscriptionPlanDTO planDTO);
+	                                           SubscriptionPlanDTO planDTO) throws Exception;
 
-	void deleteSubscriptionPlan(Long planId);
+	void deleteSubscriptionPlan(Long planId) throws Exception;
 
 	List<SubscriptionPlanDTO> getAllSubscriptionPlan();
 }

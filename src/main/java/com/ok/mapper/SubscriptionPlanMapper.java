@@ -2,7 +2,9 @@ package com.ok.mapper;
 
 import com.ok.model.SubscriptionPlan;
 import com.ok.payload.dto.SubscriptionPlanDTO;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SubscriptionPlanMapper {
 
 	public SubscriptionPlanDTO toDTO(SubscriptionPlan plan) {
