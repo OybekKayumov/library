@@ -1,5 +1,6 @@
 package com.ok.service.impl;
 
+import com.ok.mapper.UserMapper;
 import com.ok.model.User;
 import com.ok.payload.dto.UserDTO;
 import com.ok.repo.UserRepo;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserDTO> getAllUsers() {
-		return List.of();
+
+		List<User> users = userRepo.findAll();
+
+		return users.stream()
+						.map(UserMapper::toDTO)
+						.collect(Collectors.toList());
 	}
 }
