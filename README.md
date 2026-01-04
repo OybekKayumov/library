@@ -96,6 +96,7 @@ add admin role
         "password": "testtest"    
         }
 
+    localhost:5000/api/admin/books
 
 # 📚 Library Management System
 
