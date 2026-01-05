@@ -142,6 +142,8 @@ add Subscription Plan
     update
     localhost:5000/api/subscription-plans/admin/1
 
+add Subscription
+
 # 📚 Library Management System
 
 A full-stack Java + MySQL web application to manage book inventory, 
