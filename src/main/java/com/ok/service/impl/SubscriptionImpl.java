@@ -86,12 +86,42 @@ public class SubscriptionImpl implements SubscriptionService {
 	}
 
 	@Override
-	public SubscriptionDTO acceptSubscription(Long subscriptionId, Long paymentId) {
-		return null;
+	public SubscriptionDTO acceptSubscription(Long subscriptionId, Long paymentId) throws SubscriptionException {
+
+		Subscription subscription = subscriptionRepo.findById(subscriptionId)
+						.orElseThrow(
+							() -> new SubscriptionException("Subscription not find by ID!")
+						);
+
+		// verify payment (todo)
+
+		subscription.setIsActive(true);
+//		subscription.setStartDate(LocalDate.now());
+//		subscription.calculateEndDate();
+
+		subscription = subscriptionRepo.save(subscription);
+
+		return subscriptionMapper.toDTO(subscription);
 	}
 
 	@Override
 	public List<SubscriptionDTO> getAllSubscriptions(Pageable pageable) {
-		return List.of();
+
+		List<Subscription> subscriptions = subscriptionRepo.findAll();
+
+		return subscriptionMapper.toDTOList(subscriptions);
+	}
+
+	@Override
+	public void deactivateExpiredSubscriptions(Long userId) throws Exception {
+
+		List<Subscription> expiredSubscriptions =
+						subscriptionRepo.findExpiredActiveSubscriptions(LocalDate.now());
+
+		for (Subscription subscription : expiredSubscriptions) {
+			subscription.setIsActive(false);
+			subscriptionRepo.save(subscription);
+		}
+
 	}
 }
