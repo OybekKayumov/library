@@ -15,10 +15,10 @@ public interface SubscriptionService {
 
 	SubscriptionDTO cancelSubscription(Long subscriptionId, String reason) throws SubscriptionException;
 
-	SubscriptionDTO acceptSubscription(Long subscriptionId, Long paymentId) throws SubscriptionException;
+	SubscriptionDTO activateSubscription(Long subscriptionId, Long paymentId) throws SubscriptionException;
 
 	List<SubscriptionDTO> getAllSubscriptions(Pageable pageable);
 
-	void deactivateExpiredSubscriptions(Long userId) throws Exception;
+	void deactivateExpiredSubscriptions() throws Exception;
 
 }

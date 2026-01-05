@@ -42,6 +42,7 @@ public class SubscriptionImpl implements SubscriptionService {
 
 		Subscription subscription = subscriptionMapper.toEntity(subscriptionDTO);
 		subscription.initializeFromPlan();
+		subscription.setIsActive(false);
 		Subscription savedSubscription = subscriptionRepo.save(subscription);
 
 		// create payment (todo)
@@ -86,7 +87,7 @@ public class SubscriptionImpl implements SubscriptionService {
 	}
 
 	@Override
-	public SubscriptionDTO acceptSubscription(Long subscriptionId, Long paymentId) throws SubscriptionException {
+	public SubscriptionDTO activateSubscription(Long subscriptionId, Long paymentId) throws SubscriptionException {
 
 		Subscription subscription = subscriptionRepo.findById(subscriptionId)
 						.orElseThrow(
@@ -113,7 +114,7 @@ public class SubscriptionImpl implements SubscriptionService {
 	}
 
 	@Override
-	public void deactivateExpiredSubscriptions(Long userId) throws Exception {
+	public void deactivateExpiredSubscriptions() throws Exception {
 
 		List<Subscription> expiredSubscriptions =
 						subscriptionRepo.findExpiredActiveSubscriptions(LocalDate.now());
