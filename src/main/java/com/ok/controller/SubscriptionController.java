@@ -5,7 +5,6 @@ import com.ok.payload.dto.SubscriptionDTO;
 import com.ok.payload.response.ApiResponse;
 import com.ok.service.SubscriptionService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +22,7 @@ public class SubscriptionController {
 
 	@PostMapping("/subscribe")
 	public ResponseEntity<?> subscribe(
-					@Valid @RequestBody SubscriptionDTO subscription) throws  Exception {
+					@RequestBody SubscriptionDTO subscription) throws  Exception {
 
 		SubscriptionDTO dto = subscriptionService.subscribe(subscription);
 

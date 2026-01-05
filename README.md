@@ -144,6 +144,18 @@ add Subscription Plan
 
 add Subscription
 
+    post - Bearer Token - {{jwt}}
+    localhost:5000/api/subscriptions/subscribe
+        {
+        "planId": 2,
+        "startDate": "2026-01-01",
+        "autorenew": true,
+        "notes": "First-time subscription"
+        }
+    
+    get all subscriptions
+    localhost:5000/api/subscriptions/admin
+
 # 📚 Library Management System
 
 A full-stack Java + MySQL web application to manage book inventory, 

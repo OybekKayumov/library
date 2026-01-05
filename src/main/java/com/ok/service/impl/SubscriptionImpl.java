@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,9 +37,7 @@ public class SubscriptionImpl implements SubscriptionService {
 								() -> new Exception("Plan not found!")
 		);
 
-//		Optional<Subscription> subscription = subscriptionRepo
-
-		Subscription subscription = subscriptionMapper.toEntity(subscriptionDTO);
+		Subscription subscription = subscriptionMapper.toEntity(subscriptionDTO, plan, user);
 		subscription.initializeFromPlan();
 		subscription.setIsActive(false);
 		Subscription savedSubscription = subscriptionRepo.save(subscription);
