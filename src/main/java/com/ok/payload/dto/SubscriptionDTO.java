@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class SubscriptionDTO {
 
-	Long id;
+	private Long id;
 
 	@NotNull(message = "User ID is mandatory!")
 	private Long userId;

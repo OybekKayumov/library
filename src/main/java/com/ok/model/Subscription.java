@@ -19,7 +19,7 @@ public class Subscription {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private Long id;
 
 	@ManyToOne
 	@JoinColumn(nullable = false)
@@ -50,9 +50,9 @@ public class Subscription {
 	@Column(nullable = false)
 	private Boolean isActive = true;
 
-	private Boolean autoReview;
+	private Boolean autoRenew;
 
-	private LockModeType cancelledAt;
+	private LocalDateTime cancelledAt;
 
 	private String cancellationReason;
 
