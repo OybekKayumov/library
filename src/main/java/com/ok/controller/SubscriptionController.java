@@ -78,7 +78,7 @@ public class SubscriptionController {
 
 	@PostMapping("/activate")
 	public ResponseEntity<?> activateSubscription(
-					@PathVariable Long subscriptionId,
+					@RequestParam Long subscriptionId,
 					@RequestParam Long paymentId) throws SubscriptionException {
 
 		SubscriptionDTO subscription = subscriptionService

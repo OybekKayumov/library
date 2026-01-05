@@ -156,6 +156,12 @@ add Subscription
     get all subscriptions
     localhost:5000/api/subscriptions/admin
 
+    activate subscription
+    localhost:5000/api/subscriptions/activate?subscriptionId=102&paymentId=1
+
+    get
+    localhost:5000/api/subscriptions/user/active
+
 # 📚 Library Management System
 
 A full-stack Java + MySQL web application to manage book inventory, 
