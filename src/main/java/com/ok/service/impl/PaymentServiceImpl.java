@@ -2,6 +2,7 @@ package com.ok.service.impl;
 
 import com.ok.domain.PaymentGateway;
 import com.ok.domain.PaymentStatus;
+import com.ok.mapper.PaymentMapper;
 import com.ok.model.Payment;
 import com.ok.model.Subscription;
 import com.ok.model.User;
@@ -32,6 +33,7 @@ public class PaymentServiceImpl implements PaymentService {
 	private final SubscriptionRepo subscriptionRepo;
 	private final PaymentRepo paymentRepo;
 	private final RazorpayService razorpayService;
+	private final PaymentMapper paymentMapper;
 
 	@Override
 	public PaymentInitiateResponse initiatePayment(PaymentInitiateRequest request) throws Exception {
@@ -90,12 +92,19 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public PaymentDTO verifyPayment(PaymentVerifyRequest req) {
+	public PaymentDTO verifyPayment(PaymentVerifyRequest req) throws Exception {
+
+		boolean isValid =
+						razorpayService.isValidPayment(req.getRazorpayPaymentId());
+
 		return null;
 	}
 
 	@Override
 	public Page<PaymentDTO> getAllPayments(Pageable pageable) {
-		return null;
+
+		Page<Payment> payments = paymentRepo.findAll(pageable);
+
+		return payments.map(paymentMapper::toDTO);
 	}
 }

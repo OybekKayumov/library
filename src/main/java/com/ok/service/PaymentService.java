@@ -11,7 +11,7 @@ public interface PaymentService {
 
 	PaymentInitiateResponse initiatePayment(PaymentInitiateRequest req) throws Exception;
 
-	PaymentDTO verifyPayment(PaymentVerifyRequest req);
+	PaymentDTO verifyPayment(PaymentVerifyRequest req) throws Exception;
 
 	Page<PaymentDTO> getAllPayments(Pageable pageable);
 

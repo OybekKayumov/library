@@ -6,9 +6,13 @@ import com.ok.domain.PaymentType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PaymentDTO {
 
 	private Long id;
@@ -27,7 +31,7 @@ public class PaymentDTO {
 	@NotNull(message = "Payment Type is mandatory!")
 	private PaymentType paymentType;
 
-	private PaymentStatus paymentStatus;
+	private PaymentStatus status;
 
 	@NotNull(message = "Payment gateway is mandatory!")
 	private PaymentGateway gateway;
