@@ -76,4 +76,18 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
 						planMapper::toDTO
 		).collect(Collectors.toList());
 	}
+
+	@Override
+	public SubscriptionPlan getBySubscriptionPlanCode(String subscriptionPlanCode) throws Exception {
+
+		SubscriptionPlan plan =
+		//! subscriptionPlanRepo.findByPlanCode(subscriptionPlanCode);
+									planRepo.findByPlanCode(subscriptionPlanCode);
+
+		if (plan == null) {
+			throw new Exception("Plan not found!");
+		}
+
+		return plan;
+	}
 }

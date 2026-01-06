@@ -7,4 +7,6 @@ public interface SubscriptionPlanRepo extends JpaRepository<SubscriptionPlan, Lo
 
 	Boolean existsByPlanCode(String planCode);
 
+	SubscriptionPlan findByPlanCode(String planCode);
+
 }

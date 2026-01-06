@@ -2,8 +2,10 @@ package com.ok.service.gateway;
 
 import com.ok.domain.PaymentType;
 import com.ok.model.Payment;
+import com.ok.model.SubscriptionPlan;
 import com.ok.model.User;
 import com.ok.payload.response.PaymentLinkResponse;
+import com.ok.service.SubscriptionPlanService;
 import com.razorpay.PaymentLink;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
@@ -16,6 +18,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RazorpayService {
 
+	private final SubscriptionPlanService subscriptionPlanService;
+	String razorpayKeyId = new String();
+	String razorpayKeySecret = new String();
+	String callbackBaseUrl = "http://localhost:5173";
+
 	public PaymentLinkResponse createPaymentLink(User user, Payment payment) {
 
 //		@Value("${razorpay.key.id:}")
@@ -27,9 +34,9 @@ public class RazorpayService {
 //		@Value("${razorpay.callback.base-url:http://localhost:5173}")
 //		private String callbackBaseUrl;
 
-		String razorpayKeyId = new String();
-		String razorpayKeySecret = new String();
-		String callbackBaseUrl = "http://localhost:5173";
+//		String razorpayKeyId = new String();
+//		String razorpayKeySecret = new String();
+//		String callbackBaseUrl = "http://localhost:5173";
 
 		try {
 
@@ -103,6 +110,64 @@ public class RazorpayService {
 			throw new RuntimeException(e);
 		}
 
+	}
+
+	public JSONObject fetchPaymentDetails(String paymentId) throws Exception {
+
+		try {
+
+			RazorpayClient razorpay =  new RazorpayClient(razorpayKeyId,
+							razorpayKeySecret);
+			com.razorpay.Payment payment = razorpay.payments.fetch(paymentId);
+
+			return payment.toJson();
+		} catch (RazorpayException e) {
+
+			throw new Exception("Failed to fetch payment details" + e.getMessage(),
+							e);
+		}
+
+	}
+
+	public boolean isValidPayment(String paymentId) throws Exception {
+
+		try {
+
+			JSONObject paymentDetails = fetchPaymentDetails(paymentId);
+
+			String status = paymentDetails.optString("status");
+			long amount = paymentDetails.optLong("amount");
+			long amountInRupees = amount / 100;
+
+			JSONObject notes = paymentDetails.optJSONObject("notes");
+
+			String paymentType = notes.optString("type");
+
+			if (!"captured".equalsIgnoreCase(status)) {
+
+				return false;
+			}
+
+			if (paymentType.equals(PaymentType.MEMBERSHIP.toString())) {
+
+				String planCode = notes.optString("plan");
+				SubscriptionPlan subscriptionPlan = subscriptionPlanService
+								.getBySubscriptionPlanCode(planCode);
+
+				return amountInRupees == subscriptionPlan.getPrice();
+
+			} else if (paymentType.equals(PaymentType.FINE.toString())) {
+
+				Long fineId = notes.getLong("fine_id");
+
+				// todo
+			}
+
+			return false;
+		} catch (Exception e) {
+
+			return false;
+		}
 	}
 
 }
