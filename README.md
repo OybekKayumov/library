@@ -162,6 +162,13 @@ add Subscription
     get
     localhost:5000/api/subscriptions/user/active
 
+add Payments
+    get all Payments
+    localhost:5000/api/payments
+
+add BookLoan
+
+
 # 📚 Library Management System
 
 A full-stack Java + MySQL web application to manage book inventory, 
