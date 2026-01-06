@@ -1,5 +1,6 @@
 package com.ok.service.impl;
 
+import com.ok.domain.PaymentGateway;
 import com.ok.domain.PaymentStatus;
 import com.ok.model.Payment;
 import com.ok.model.Subscription;
@@ -8,10 +9,12 @@ import com.ok.payload.dto.PaymentDTO;
 import com.ok.payload.request.PaymentInitiateRequest;
 import com.ok.payload.request.PaymentVerifyRequest;
 import com.ok.payload.response.PaymentInitiateResponse;
+import com.ok.payload.response.PaymentLinkResponse;
 import com.ok.repo.PaymentRepo;
 import com.ok.repo.SubscriptionRepo;
 import com.ok.repo.UserRepo;
 import com.ok.service.PaymentService;
+import com.ok.service.gateway.RazorpayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +31,7 @@ public class PaymentServiceImpl implements PaymentService {
 	private final UserRepo userRepo;
 	private final SubscriptionRepo subscriptionRepo;
 	private final PaymentRepo paymentRepo;
+	private final RazorpayService razorpayService;
 
 	@Override
 	public PaymentInitiateResponse initiatePayment(PaymentInitiateRequest request) throws Exception {
@@ -54,7 +58,35 @@ public class PaymentServiceImpl implements PaymentService {
 		}
 
 		payment = paymentRepo.save(payment);
-		return null;
+
+		PaymentInitiateResponse response =  new PaymentInitiateResponse();
+
+		if (request.getGateway() == PaymentGateway.RAZORPAY) {
+
+			PaymentLinkResponse paymentLinkResponse = razorpayService.createPaymentLink(
+							user, payment
+			);
+
+			response = PaymentInitiateResponse.builder()
+							.paymentId(payment.getId())
+							.gateway(payment.getGateway())
+							.checkoutUrl(paymentLinkResponse.getPayment_link_url())
+							.transactionId(paymentLinkResponse.getPayment_link_id())
+							.amount(payment.getAmount())
+							.description(payment.getDescription())
+							.success(true)
+							.message("Payment initiated successfully!")
+							.build();
+
+			payment.setGatewayOrderId(paymentLinkResponse.getPayment_link_id());
+		}
+
+		payment.setStatus(PaymentStatus.PROCESSING);
+		paymentRepo.save(payment);
+
+		//* payment initiate event
+
+		return response;
 	}
 
 	@Override
