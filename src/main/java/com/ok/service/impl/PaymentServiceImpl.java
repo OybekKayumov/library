@@ -2,6 +2,7 @@ package com.ok.service.impl;
 
 import com.ok.domain.PaymentGateway;
 import com.ok.domain.PaymentStatus;
+import com.ok.event.publisher.PaymentEventPublisher;
 import com.ok.mapper.PaymentMapper;
 import com.ok.model.Payment;
 import com.ok.model.Subscription;
@@ -35,6 +36,7 @@ public class PaymentServiceImpl implements PaymentService {
 	private final PaymentRepo paymentRepo;
 	private final RazorpayService razorpayService;
 	private final PaymentMapper paymentMapper;
+	private final PaymentEventPublisher paymentEventPublisher;
 
 	@Override
 	public PaymentInitiateResponse initiatePayment(PaymentInitiateRequest request) throws Exception {
@@ -119,6 +121,7 @@ public class PaymentServiceImpl implements PaymentService {
 			payment = paymentRepo.save(payment);
 
 			//* publish payment success event - todo
+			paymentEventPublisher.publishPaymentSuccessEvent(payment);
 		}
 
 		return paymentMapper.toDTO(payment);

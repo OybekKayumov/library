@@ -3,6 +3,7 @@ package com.ok.controller;
 import com.ok.exception.SubscriptionException;
 import com.ok.payload.dto.SubscriptionDTO;
 import com.ok.payload.response.ApiResponse;
+import com.ok.payload.response.PaymentInitiateResponse;
 import com.ok.service.SubscriptionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,8 @@ public class SubscriptionController {
 	public ResponseEntity<?> subscribe(
 					@RequestBody SubscriptionDTO subscription) throws  Exception {
 
-		SubscriptionDTO dto = subscriptionService.subscribe(subscription);
+		//SubscriptionDTO dto = subscriptionService.subscribe(subscription);
+		PaymentInitiateResponse dto = subscriptionService.subscribe(subscription);
 
 		return ResponseEntity.ok(dto);
 	}

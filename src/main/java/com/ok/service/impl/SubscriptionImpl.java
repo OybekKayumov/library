@@ -1,13 +1,18 @@
 package com.ok.service.impl;
 
+import com.ok.domain.PaymentGateway;
+import com.ok.domain.PaymentType;
 import com.ok.exception.SubscriptionException;
 import com.ok.mapper.SubscriptionMapper;
 import com.ok.model.Subscription;
 import com.ok.model.SubscriptionPlan;
 import com.ok.model.User;
 import com.ok.payload.dto.SubscriptionDTO;
+import com.ok.payload.request.PaymentInitiateRequest;
+import com.ok.payload.response.PaymentInitiateResponse;
 import com.ok.repo.SubscriptionPlanRepo;
 import com.ok.repo.SubscriptionRepo;
+import com.ok.service.PaymentService;
 import com.ok.service.SubscriptionService;
 import com.ok.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +31,12 @@ public class SubscriptionImpl implements SubscriptionService {
 	private final SubscriptionMapper subscriptionMapper;
 	private final UserService userService;
 	private final SubscriptionPlanRepo subscriptionPlanRepo;
+	private final PaymentService paymentService;
 
 	@Override
-	public SubscriptionDTO subscribe(SubscriptionDTO subscriptionDTO) throws Exception {
+	//public SubscriptionDTO subscribe(SubscriptionDTO subscriptionDTO) throws
+	// Exception {
+	public PaymentInitiateResponse subscribe(SubscriptionDTO subscriptionDTO) throws Exception {
 
 		User user = userService.getCurrentUser();
 
@@ -43,8 +51,18 @@ public class SubscriptionImpl implements SubscriptionService {
 		Subscription savedSubscription = subscriptionRepo.save(subscription);
 
 		// create payment (todo)
+		PaymentInitiateRequest paymentInitiateRequest =
+						PaymentInitiateRequest.builder()
+										.userId(user.getId())
+										.subscriptionId(savedSubscription.getId())
+										.paymentType(PaymentType.MEMBERSHIP)
+										.gateway(PaymentGateway.RAZORPAY)
+										.amount(subscription.getPrice())
+										.description("Library Subscription - " + plan.getName())
+										.build();
 
-		return subscriptionMapper.toDTO(savedSubscription);
+		//return subscriptionMapper.toDTO(savedSubscription);
+		return paymentService.initiatePayment(paymentInitiateRequest);
 	}
 
 	@Override

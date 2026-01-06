@@ -1,13 +1,11 @@
 package com.ok.payload.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PaymentVerifyRequest {
 
 	private String razorpayPaymentId;
