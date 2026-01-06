@@ -31,7 +31,7 @@ public class Payment {
 
 	private PaymentType paymentType;
 
-	private PaymentStatus paymentStatus;
+	private PaymentStatus status;
 
 	@Enumerated(EnumType.STRING)
 	private PaymentGateway gateway;
