@@ -29,8 +29,10 @@ public class Payment {
 	@ManyToOne
 	private Subscription subscription;
 
+	@Enumerated(EnumType.STRING)
 	private PaymentType paymentType;
 
+	@Enumerated(EnumType.STRING)
 	private PaymentStatus status;
 
 	@Enumerated(EnumType.STRING)

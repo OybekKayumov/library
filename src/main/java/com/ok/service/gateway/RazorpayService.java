@@ -43,8 +43,9 @@ public class RazorpayService {
 			RazorpayClient razorpayClient = new RazorpayClient(razorpayKeyId,
 							razorpayKeySecret);
 
-			Long amountInPaisa = payment.getAmount() * (new java.math.BigDecimal(
-							"100")).intValue();
+//			Long amountInPaisa = payment.getAmount() * (new java.math.BigDecimal(
+//							"100")).intValue();
+			Long amountInPaisa = payment.getAmount() * 100;
 
 			JSONObject paymentLinkRequest = new JSONObject();
 			paymentLinkRequest.put("amount", amountInPaisa);
