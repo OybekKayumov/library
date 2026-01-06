@@ -17,6 +17,7 @@ import com.ok.repo.UserRepo;
 import com.ok.service.PaymentService;
 import com.ok.service.gateway.RazorpayService;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -94,10 +95,33 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public PaymentDTO verifyPayment(PaymentVerifyRequest req) throws Exception {
 
+		JSONObject paymentDetails = razorpayService.fetchPaymentDetails(
+						req.getRazorpayPaymentId()
+		);
+
+		JSONObject notes = paymentDetails.getJSONObject("notes");
+		Long paymentId = Long.parseLong(notes.optString("payment_id"));
+
+		Payment payment = paymentRepo.findById(paymentId).get();
+
 		boolean isValid =
 						razorpayService.isValidPayment(req.getRazorpayPaymentId());
 
-		return null;
+		if (PaymentGateway.RAZORPAY == payment.getGateway()) {
+			if (isValid) {
+				payment.setGatewayOrderId(req.getRazorpayPaymentId());
+			}
+		}
+
+		if (isValid) {
+			payment.setStatus(PaymentStatus.SUCCESS);
+			payment.setCompletedAt(LocalDateTime.now());
+			payment = paymentRepo.save(payment);
+
+			//* publish payment success event - todo
+		}
+
+		return paymentMapper.toDTO(payment);
 	}
 
 	@Override
