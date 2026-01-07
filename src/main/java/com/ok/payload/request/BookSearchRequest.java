@@ -1,5 +1,6 @@
 package com.ok.payload.request;
 
+import com.ok.domain.BookLoanStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

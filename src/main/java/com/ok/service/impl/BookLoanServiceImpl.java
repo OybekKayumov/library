@@ -206,9 +206,22 @@ public class BookLoanServiceImpl implements BookLoanService {
 	}
 
 	@Override
-	public PageResponse<BookLoanDTO> getBookLoans(BookLoanSearchRequest request) throws Exception {
+	public PageResponse<BookLoanDTO> getBookLoans(BookLoanSearchRequest searchRequest) throws Exception {
 
+		Pageable pageable = createPageable(
+						searchRequest.getPage(),
+						searchRequest.getSize(),
+						searchRequest.getSortBy(),
+						searchRequest.getSortDirection()
+		);
 
+		Page<BookLoan> bookLoanPage;
+
+		if (Boolean.TRUE.equals(searchRequest.getOverdueOnly())) {
+
+			bookLoanPage = bookLoanRepo.findOverdueBookLoans(LocalDate.now(),
+							pageable);
+		}
 		return null;
 	}
 
