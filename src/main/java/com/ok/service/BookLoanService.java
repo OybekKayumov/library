@@ -10,9 +10,9 @@ import com.ok.payload.response.PageResponse;
 
 public interface BookLoanService {
 
-	BookLoanDTO checkOutBook(Long userId, CheckoutRequest checkoutRequest) throws Exception;
+	BookLoanDTO checkOutBook(CheckoutRequest checkoutRequest) throws Exception;
 
-	BookLoanDTO checkoutBookForUser(Long userId, CheckoutRequest checkoutRequest);
+	BookLoanDTO checkoutBookForUser(Long userId, CheckoutRequest checkoutRequest) throws Exception;
 
 	BookLoanDTO checkinBookBook(CheckinRequest checkinRequest);
 

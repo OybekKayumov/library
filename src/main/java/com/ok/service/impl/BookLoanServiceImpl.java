@@ -1,8 +1,11 @@
 package com.ok.service.impl;
 
 import com.ok.domain.BookLoanStatus;
+import com.ok.domain.BookLoanType;
 import com.ok.exception.BookException;
+import com.ok.mapper.BookLoanMapper;
 import com.ok.model.Book;
+import com.ok.model.BookLoan;
 import com.ok.model.Subscription;
 import com.ok.model.User;
 import com.ok.payload.dto.BookLoanDTO;
@@ -20,6 +23,8 @@ import com.ok.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class BookLoanServiceImpl implements BookLoanService {
@@ -28,11 +33,19 @@ public class BookLoanServiceImpl implements BookLoanService {
 	private final SubscriptionService subscriptionService;
 	private final BookRepo bookRepo;
 	private final BookLoanRepo bookLoanRepo;
+	private final BookLoanMapper bookLoanMapper;
 
 	@Override
-	public BookLoanDTO checkOutBook(Long userId,
-	                                CheckoutRequest checkoutRequest) throws Exception {
+	public BookLoanDTO checkOutBook(CheckoutRequest checkoutRequest) throws Exception {
 
+		User user = userService.getCurrentUser();
+
+		return checkoutBookForUser(user.getId(), checkoutRequest);
+
+	}
+
+	@Override
+	public BookLoanDTO checkoutBookForUser(Long userId, CheckoutRequest checkoutRequest) throws Exception {
 		//* 1 - validate user exist
 		User user = userService.findById(userId);
 
@@ -71,12 +84,32 @@ public class BookLoanServiceImpl implements BookLoanService {
 			throw new Exception("First return old overdue book!");
 		}
 
-		return null;
-	}
+		//* 7 - fine todo
 
-	@Override
-	public BookLoanDTO checkoutBookForUser(Long userId, CheckoutRequest checkoutRequest) {
-		return null;
+		//* 8 - create book loan
+		BookLoan bookLoan = BookLoan.builder()
+						.user(user)
+						.book(book)
+						.type(BookLoanType.CHECKOUT)
+						.status(BookLoanStatus.CHECKED_OUT)
+						.checkoutDate(LocalDate.now())
+						.dueDate(LocalDate.now().plusDays(checkoutRequest.getCheckoutDays()))
+						.renewalCount(0)
+						.maxRenewals(2)
+						.notes(checkoutRequest.getNotes())
+						.isOverdue(false)
+						.overdueDays(0)
+						.build();
+
+		//* 9 - update book available copies
+		book.setAvailableCopies(book.getAvailableCopies() -1);
+		bookRepo.save(book);
+
+		//* 10 - save book loan
+		BookLoan savedBookLoan = bookLoanRepo.save(bookLoan);
+
+		return bookLoanMapper.toDTO(savedBookLoan);
+
 	}
 
 	@Override
