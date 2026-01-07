@@ -70,4 +70,8 @@ public class BookLoan {
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
 
+	public boolean isActive() {
+		return status == BookLoanStatus.CHECKED_OUT ||
+						status == BookLoanStatus.OVERDUE;
+	}
 }

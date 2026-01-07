@@ -113,8 +113,47 @@ public class BookLoanServiceImpl implements BookLoanService {
 	}
 
 	@Override
-	public BookLoanDTO checkinBookBook(CheckinRequest checkinRequest) {
-		return null;
+	public BookLoanDTO checkinBookBook(CheckinRequest checkinRequest) throws Exception {
+
+		//* 1 - validate boo loan exist
+		BookLoan bookLoan = bookLoanRepo.findById(checkinRequest.getBookLoanId())
+						.orElseThrow(() -> new Exception("BookLoan not found!"));
+
+		//* 2 - check if already returned
+		if (!bookLoan.isActive()) {
+			throw new BookException("Book loan is not active.");
+		}
+
+		//* 3 - set return date
+		bookLoan.setReturnDate(LocalDate.now());
+
+		//* 4 - check status
+		BookLoanStatus condition = checkinRequest.getCondition();
+		if (condition == null) {
+			condition = BookLoanStatus.RETURNED;
+		}
+
+		//* 5 - fine - todo
+		bookLoan.setOverdueDays(0);
+		bookLoan.setIsOverdue(false);
+
+		//* 6 - fine - todo
+		bookLoan.setNotes("Book returned by user");
+
+		//* 7 - update book availability
+		if (condition != BookLoanStatus.LOST) {
+			Book book = bookLoan.getBook();
+			book.setAvailableCopies(book.getAvailableCopies() + 1);
+			bookRepo.save(book);
+
+			//* process next reservation - todo
+		}
+
+		//* 8
+		BookLoan savedBookLoan = bookLoanRepo.save(bookLoan);
+
+		return bookLoanMapper.toDTO(savedBookLoan);
+
 	}
 
 	@Override
