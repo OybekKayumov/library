@@ -20,6 +20,8 @@ public interface BookLoanRepo extends JpaRepository<BookLoan, Long> {
 
 	Page<BookLoan> findByStatus(BookLoanStatus status, Pageable pageable);
 
+	Page<BookLoan> findByBookId(Long bookId, Pageable pageable);
+
 	//! end!
 	@Query("select case when count(bl) > 0 then true else false end from " +
 					"BookLoan bl where bl.user.id =: userId AND bl.book.id =: bookId " +
@@ -42,4 +44,13 @@ public interface BookLoanRepo extends JpaRepository<BookLoan, Long> {
 					"AND (bl.status = 'CHECKED_OUT' OR bl.status = 'OVERDUE')")
 	Page<BookLoan> findOverdueBookLoans(
 					@Param("currentDate")LocalDate currentDate, Pageable pageable);
+
+	@Query("select bl from BookLoan bl where bl.checkoutDate BETWEEN " +
+					":startDate AND :endDate")
+	Page<BookLoan> findBookLoansByDateRange(
+					@Param("startedDate") LocalDate startDate,
+					@Param("endDate") LocalDate endDate,
+					Pageable pageable
+	);
+
 }

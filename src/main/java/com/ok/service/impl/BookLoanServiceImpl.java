@@ -219,10 +219,36 @@ public class BookLoanServiceImpl implements BookLoanService {
 
 		if (Boolean.TRUE.equals(searchRequest.getOverdueOnly())) {
 
-			bookLoanPage = bookLoanRepo.findOverdueBookLoans(LocalDate.now(),
+			bookLoanPage = bookLoanRepo.findOverdueBookLoans(
+							LocalDate.now(), pageable);
+
+		} else if (searchRequest.getUserId() != null) {
+
+			bookLoanPage = bookLoanRepo.findByUserId(searchRequest.getUserId(), pageable);
+
+		} else if (searchRequest.getBookId() != null) {
+
+			bookLoanPage = bookLoanRepo.findByBookId(searchRequest.getBookId(),
 							pageable);
+
+		} else if (searchRequest.getStatus() != null) {
+
+			bookLoanPage = bookLoanRepo.findByStatus(searchRequest.getStatus(), pageable);
+
+		} else if (searchRequest.getStartDate() != null && searchRequest.getEndDate() != null) {
+
+			bookLoanPage = bookLoanRepo.findBookLoansByDateRange(
+							searchRequest.getStartDate(),
+							searchRequest.getEndDate(),
+							pageable
+			);
+		} else {
+
+			bookLoanPage = bookLoanRepo.findAll(pageable);
 		}
-		return null;
+
+		return convertToPageResponse(bookLoanPage);
+
 	}
 
 	@Override
