@@ -157,8 +157,25 @@ public class BookLoanServiceImpl implements BookLoanService {
 	}
 
 	@Override
-	public BookLoanDTO renewCheckout(RenewalRequest renewalRequest) {
-		return null;
+	public BookLoanDTO renewCheckout(RenewalRequest renewalRequest) throws Exception {
+
+		BookLoan bookLoan = bookLoanRepo.findById(renewalRequest.getBookLoanId())
+						.orElseThrow(() -> new Exception("Book loan not found!"));
+
+		if (!bookLoan.canRenew()) {
+			throw new BookException("Book cannot be renewed.");
+		}
+
+		bookLoan.setDueDate(bookLoan.getDueDate().plusDays(renewalRequest.getExtensionDays()));
+
+		bookLoan.setRenewalCount(bookLoan.getRenewalCount() + 1);
+
+		bookLoan.setNotes("Book renewed by user!");
+
+		BookLoan savedBookLoan = bookLoanRepo.save(bookLoan);
+
+		return bookLoanMapper.toDTO(savedBookLoan);
+
 	}
 
 	@Override
