@@ -25,4 +25,8 @@ public interface BookLoanRepo extends JpaRepository<BookLoan, Long> {
 					@Param("userId") Long userId,
 					@Param("bookId") Long bookId);
 
+	@Query("select count(bl) from BookLoan bl where bl.user.id =: userId AND " +
+					"(bl.status = 'CHECKED_OUT' OR bl.status = 'OVERDUE')")
+	long countActiveBookLoansByUser(
+					@Param("userId") Long userId);
 }

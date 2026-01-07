@@ -57,6 +57,9 @@ public class BookLoanServiceImpl implements BookLoanService {
 			throw new BookException("Book already has active checkout.");
 		}
 
+		//* 5 - check user's active checkout limit
+		long activeCheckouts = bookLoanRepo.countActiveBookLoansByUser(userId);
+
 		return null;
 	}
 
