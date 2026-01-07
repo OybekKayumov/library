@@ -43,7 +43,7 @@ public class BookLoanServiceImpl implements BookLoanService {
 	private final BookLoanMapper bookLoanMapper;
 
 	@Override
-	public BookLoanDTO checkOutBook(CheckoutRequest checkoutRequest) throws Exception {
+	public BookLoanDTO checkoutBook(CheckoutRequest checkoutRequest) throws Exception {
 
 		User user = userService.getCurrentUser();
 
@@ -120,7 +120,7 @@ public class BookLoanServiceImpl implements BookLoanService {
 	}
 
 	@Override
-	public BookLoanDTO checkinBookBook(CheckinRequest checkinRequest) throws Exception {
+	public BookLoanDTO checkinBook(CheckinRequest checkinRequest) throws Exception {
 
 		//* 1 - validate boo loan exist
 		BookLoan bookLoan = bookLoanRepo.findById(checkinRequest.getBookLoanId())

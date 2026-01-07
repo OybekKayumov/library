@@ -10,11 +10,11 @@ import com.ok.payload.response.PageResponse;
 
 public interface BookLoanService {
 
-	BookLoanDTO checkOutBook(CheckoutRequest checkoutRequest) throws Exception;
+	BookLoanDTO checkoutBook(CheckoutRequest checkoutRequest) throws Exception;
 
 	BookLoanDTO checkoutBookForUser(Long userId, CheckoutRequest checkoutRequest) throws Exception;
 
-	BookLoanDTO checkinBookBook(CheckinRequest checkinRequest) throws Exception;
+	BookLoanDTO checkinBook(CheckinRequest checkinRequest) throws Exception;
 
 	BookLoanDTO renewCheckout(RenewalRequest renewalRequest) throws Exception;
 
