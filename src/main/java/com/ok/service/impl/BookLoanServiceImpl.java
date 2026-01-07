@@ -59,6 +59,17 @@ public class BookLoanServiceImpl implements BookLoanService {
 
 		//* 5 - check user's active checkout limit
 		long activeCheckouts = bookLoanRepo.countActiveBookLoansByUser(userId);
+		int maxBooksAllowed = subscription.getMaxBookAllowed();
+
+		if (activeCheckouts >= maxBooksAllowed) {
+			throw new Exception("You have reached the maximum allowed number of book loans.");
+		}
+
+		//* 6 - check for overdue books
+		long overdueCount = bookLoanRepo.countOverdueBookLoansByUser(userId);
+		if (overdueCount > 0) {
+			throw new Exception("First return old overdue book!");
+		}
 
 		return null;
 	}
