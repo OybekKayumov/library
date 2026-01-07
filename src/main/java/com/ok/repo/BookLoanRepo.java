@@ -2,6 +2,7 @@ package com.ok.repo;
 
 import com.ok.domain.BookLoanStatus;
 import com.ok.model.BookLoan;
+import com.ok.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +13,7 @@ public interface BookLoanRepo extends JpaRepository<BookLoan, Long> {
 
 	Page<BookLoan> findByUserId(Long userId, Pageable pageable);
 
-	Page<BookLoan> findByUserIdAndStatus(Long userId, BookLoanStatus status,
+	Page<BookLoan> findByStatusAndUser(BookLoanStatus status, User user,
 	                                     Pageable pageable);
 
 	Page<BookLoan> findByStatus(BookLoanStatus status, Pageable pageable);

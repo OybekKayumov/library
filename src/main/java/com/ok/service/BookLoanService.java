@@ -19,9 +19,9 @@ public interface BookLoanService {
 	BookLoanDTO renewCheckout(RenewalRequest renewalRequest) throws Exception;
 
 	PageResponse<BookLoanDTO> getMyBookLoans(
-					BookLoanStatus status, int page, int size);
+					BookLoanStatus status, int page, int size) throws Exception;
 
-	PageResponse<BookLoanDTO> getBookLoans(BookLoanSearchRequest request);
+	PageResponse<BookLoanDTO> getBookLoans(BookLoanSearchRequest request) throws Exception;
 
 	int updateOverdueBookLoan();
 
