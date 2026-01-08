@@ -40,7 +40,7 @@ public class Fine {
 	private String reason;
 
 	@Column(length = 1000)
-	private String note;
+	private String notes;
 
 	@ManyToOne
 	private User waivedBy;

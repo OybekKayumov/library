@@ -61,7 +61,7 @@ public class FineDTO {
 
 	private LocalDateTime paidAt;
 
-	private LocalDateTime processedByUserId;
+	private Long processedByUserId;
 	private String processedByUserName;
 
 	private String transactionId;

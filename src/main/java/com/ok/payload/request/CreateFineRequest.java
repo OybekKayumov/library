@@ -18,7 +18,7 @@ public class CreateFineRequest {
 	private Long bookLoanId;
 
 	@NotNull(message = "Fine type is mandatory!")
-	private FineType fineType;
+	private FineType type;
 
 	@NotNull(message = "Fine amount is mandatory!")
 	@Positive(message = "Fine amount must be positive!")
