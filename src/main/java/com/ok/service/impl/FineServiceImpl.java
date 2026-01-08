@@ -2,16 +2,23 @@ package com.ok.service.impl;
 
 import com.ok.domain.FineStatus;
 import com.ok.domain.FineType;
+import com.ok.domain.PaymentGateway;
+import com.ok.domain.PaymentType;
+import com.ok.mapper.FineMapper;
 import com.ok.model.BookLoan;
 import com.ok.model.Fine;
+import com.ok.model.User;
 import com.ok.payload.dto.FineDTO;
 import com.ok.payload.request.CreateFineRequest;
+import com.ok.payload.request.PaymentInitiateRequest;
 import com.ok.payload.request.WaiveFineRequest;
 import com.ok.payload.response.PageResponse;
 import com.ok.payload.response.PaymentInitiateResponse;
 import com.ok.repo.BookLoanRepo;
 import com.ok.repo.FineRpo;
 import com.ok.service.FineService;
+import com.ok.service.PaymentService;
+import com.ok.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +29,15 @@ import java.util.List;
 public class FineServiceImpl implements FineService {
 	private final BookLoanRepo bookLoanRepo;
 	private final FineRpo fineRpo;
+	private final FineMapper fineMapper;
+	private final UserService userService;
+	private final PaymentService paymentService;
 
 	@Override
-	public FineDTO createFine(CreateFineRequest createFineRequest) {
+	public FineDTO createFine(CreateFineRequest createFineRequest) throws Exception {
 
 		BookLoan bookLoan = bookLoanRepo.findById(createFineRequest.getBookLoanId())
-						.orElseThrow(() -> new RuntimeException("Book Loan doesnt exist"));
+						.orElseThrow(() -> new Exception("Book Loan doesn't exist"));
 
 		Fine fine = Fine.builder()
 						.bookLoan(bookLoan)
@@ -40,12 +50,37 @@ public class FineServiceImpl implements FineService {
 
 		Fine savedFine = fineRpo.save(fine);
 
-		return null;
+		return fineMapper.toDTO(savedFine);
+
 	}
 
 	@Override
-	public PaymentInitiateResponse payFine(Long fineId, String transactionId) {
-		return null;
+	public PaymentInitiateResponse payFine(Long fineId, String transactionId) throws Exception {
+
+		Fine fine = fineRpo.findById(fineId)
+						.orElseThrow(() -> new Exception("Fine doesn't exist"));
+
+
+		if (fine.getStatus().equals(FineStatus.PAID)) {
+			throw new Exception("Fine is already paid");
+		}
+
+		if (fine.getStatus().equals(FineStatus.WAIVED)) {
+			throw new Exception("Fine waived");
+		}
+
+		User user = userService.getCurrentUser();
+
+		PaymentInitiateRequest request = PaymentInitiateRequest.builder()
+						.userId(user.getId())
+						.fineId(fine.getId())
+						.paymentType(PaymentType.FINE)
+						.gateway(PaymentGateway.RAZORPAY)
+						.amount(fine.getAmount())
+						.description("Library fine payment")
+						.build();
+
+		return paymentService.initiatePayment(request);
 	}
 
 	@Override

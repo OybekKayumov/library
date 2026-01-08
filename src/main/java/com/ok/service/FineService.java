@@ -13,9 +13,9 @@ import java.util.List;
 
 public interface FineService {
 
-	FineDTO createFine(CreateFineRequest createFineRequest);
+	FineDTO createFine(CreateFineRequest createFineRequest) throws Exception;
 
-	PaymentInitiateResponse payFine(Long fineId, String transactionId);
+	PaymentInitiateResponse payFine(Long fineId, String transactionId) throws Exception;
 
 	void markFineAsPaid(Long fineId, Long amount, String transactionId);
 
