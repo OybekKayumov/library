@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface FineRepo extends JpaRepository<Fine, Long> {
 
 	@Query("""
@@ -23,4 +25,10 @@ public interface FineRepo extends JpaRepository<Fine, Long> {
 					@Param("status")FineStatus status,
 					@Param("type")FineType type,
 					Pageable pageable);
+
+	List<Fine> findByUserId(Long userId);
+
+	List<Fine> findByUserIdAndType(Long userId, FineType type);
+
+
 }

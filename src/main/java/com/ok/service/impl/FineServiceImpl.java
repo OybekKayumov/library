@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -123,8 +124,36 @@ public class FineServiceImpl implements FineService {
 	}
 
 	@Override
-	public List<FineDTO> getMyFines(FineStatus status, FineType type) {
-		return List.of();
+	public List<FineDTO> getMyFines(FineStatus status, FineType type) throws Exception {
+
+		User currentUser = userService.getCurrentUser();
+		List<Fine> fines;
+
+		if (status != null && type != null) {
+
+			fines = fineRepo.findByUserId(currentUser.getId()).stream()
+							.filter(f -> f.getStatus() == status && f.getType() == type)
+							.collect(Collectors.toList());
+
+		} else if (status != null) {
+
+			fines = fineRepo.findByUserId(currentUser.getId()).stream()
+							.filter(f -> f.getStatus() == status)
+							.collect(Collectors.toList());
+
+		} else if (type != null) {
+
+			fines = fineRepo.findByUserIdAndType(currentUser.getId(), type);
+
+		} else {
+
+			fines = fineRepo.findByUserId(currentUser.getId());
+		}
+
+		return fines
+						.stream()
+						.map(fineMapper::toDTO)
+						.collect(Collectors.toList());
 	}
 
 	@Override
