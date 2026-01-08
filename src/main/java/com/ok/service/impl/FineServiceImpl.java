@@ -15,20 +15,21 @@ import com.ok.payload.request.WaiveFineRequest;
 import com.ok.payload.response.PageResponse;
 import com.ok.payload.response.PaymentInitiateResponse;
 import com.ok.repo.BookLoanRepo;
-import com.ok.repo.FineRpo;
+import com.ok.repo.FineRepo;
 import com.ok.service.FineService;
 import com.ok.service.PaymentService;
 import com.ok.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class FineServiceImpl implements FineService {
 	private final BookLoanRepo bookLoanRepo;
-	private final FineRpo fineRpo;
+	private final FineRepo fineRepo;
 	private final FineMapper fineMapper;
 	private final UserService userService;
 	private final PaymentService paymentService;
@@ -48,7 +49,7 @@ public class FineServiceImpl implements FineService {
 						.notes(createFineRequest.getNotes())
 						.build();
 
-		Fine savedFine = fineRpo.save(fine);
+		Fine savedFine = fineRepo.save(fine);
 
 		return fineMapper.toDTO(savedFine);
 
@@ -57,7 +58,7 @@ public class FineServiceImpl implements FineService {
 	@Override
 	public PaymentInitiateResponse payFine(Long fineId, String transactionId) throws Exception {
 
-		Fine fine = fineRpo.findById(fineId)
+		Fine fine = fineRepo.findById(fineId)
 						.orElseThrow(() -> new Exception("Fine doesn't exist"));
 
 
@@ -84,13 +85,41 @@ public class FineServiceImpl implements FineService {
 	}
 
 	@Override
-	public void markFineAsPaid(Long fineId, Long amount, String transactionId) {
+	public void markFineAsPaid(Long fineId, Long amount, String transactionId) throws Exception {
+
+		Fine fine = fineRepo.findById(fineId)
+						.orElseThrow(() -> new Exception("Fine not found with id: " + fineId));
+
+		fine.applyPayment(amount);
+		fine.setTransactionId(transactionId);
+		fine.setStatus(FineStatus.PAID);
+		fine.setUpdatedAt(LocalDateTime.now());
+
+		fineRepo.save(fine);
 
 	}
 
 	@Override
-	public FineDTO waiveFine(WaiveFineRequest waiveFineRequest) {
-		return null;
+	public FineDTO waiveFine(WaiveFineRequest waiveFineRequest) throws Exception {
+
+		Fine fine = fineRepo.findById(waiveFineRequest.getFineId())
+						.orElseThrow(() -> new Exception("Fine not found with id"));
+
+		if (fine.getStatus().equals(FineStatus.WAIVED)) {
+			throw new Exception("Fine is already waived");
+		}
+
+		if (fine.getStatus().equals(FineStatus.PAID)) {
+			throw new Exception("Fine is already paid");
+		}
+
+		User currentAdmin = userService.getCurrentUser();
+		fine.waive(currentAdmin, waiveFineRequest.getReason());
+
+		Fine savedFine = fineRepo.save(fine);
+
+		return fineMapper.toDTO(savedFine);
+
 	}
 
 	@Override

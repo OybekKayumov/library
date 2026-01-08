@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface FineRpo extends JpaRepository<Fine, Long> {
+public interface FineRepo extends JpaRepository<Fine, Long> {
 
 	@Query("""
 			select f from Fine f 

@@ -69,7 +69,22 @@ public class Fine {
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
 
+	public void applyPayment(Long paymentAmount) {
 
+		if (paymentAmount == null || paymentAmount <= 0) {
 
+			throw new IllegalArgumentException("Payment amount must be positive.");
+		}
+
+		this.status = FineStatus.PAID;
+		this.paidAt = LocalDateTime.now();
+	}
+
+	public void waive(User admin, String reason) {
+		this.status = FineStatus.WAIVED;
+		this.waivedBy = admin;
+		this.waivedAt = LocalDateTime.now();
+		this.waiverReason = reason;
+	}
 
 }

@@ -18,6 +18,6 @@ public class WaiveFineRequest {
 	private Long fineId;
 
 	@NotNull(message = "Waiver reason is mandatory!")
-	private FineType reason;
+	private String reason;
 
 }
