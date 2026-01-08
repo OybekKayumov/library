@@ -175,6 +175,8 @@ add Fine
     localhost:5000/api/fines/my
     localhost:5000/api/fines/waive
 
+add Reservation
+
 
 # 📚 Library Management System
 
