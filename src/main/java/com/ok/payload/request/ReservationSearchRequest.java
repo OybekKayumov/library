@@ -1,6 +1,5 @@
 package com.ok.payload.request;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +9,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReservationRequest {
+public class ReservationSearchRequest {
 
-	@NotNull(message = "Book ID is mandatory!")
+	private Long userId;
+
 	private Long bookId;
 
-	private String notes;
+	private Boolean activeOnly;
+
+	private int page = 0;
+	private int size = 20;
+
+	private String sortBy = "reservedAt";
+	private String sortDirection = "desc";
+
 }
