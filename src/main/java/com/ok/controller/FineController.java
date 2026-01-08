@@ -12,8 +12,6 @@ import com.ok.service.FineService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,7 +42,7 @@ public class FineController {
 		return ResponseEntity.ok(res);
 	}
 
-	@PostMapping
+	@PostMapping("/waive")
 	public ResponseEntity<?> waiveFine(
 					@Valid @RequestBody WaiveFineRequest waiveFineRequest) throws Exception {
 
