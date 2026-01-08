@@ -167,6 +167,8 @@ add Payments
     localhost:5000/api/payments
 
 add BookLoan
+    post
+    localhost:5000/api/book-loans/checkout
 
 
 # 📚 Library Management System

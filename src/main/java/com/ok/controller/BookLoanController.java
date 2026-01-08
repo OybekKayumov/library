@@ -45,7 +45,7 @@ public class BookLoanController {
 
 	}
 
-	@PostMapping("/checkin}")
+	@PostMapping("/{checkin}")
 	public ResponseEntity<?> checkin(
 					@Valid @RequestBody CheckinRequest checkinRequest) throws Exception {
 
