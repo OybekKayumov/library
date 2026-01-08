@@ -20,6 +20,10 @@ import com.ok.service.FineService;
 import com.ok.service.PaymentService;
 import com.ok.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -158,6 +162,38 @@ public class FineServiceImpl implements FineService {
 
 	@Override
 	public PageResponse<FineDTO> getAllFines(FineStatus status, FineType type, Long userId, int page, int size) {
-		return null;
+
+		Pageable pageable = PageRequest.of(
+						page,
+						size,
+						Sort.by("createdAt").descending());
+
+		Page<Fine> finePage = fineRepo.findAllWithFilters(
+						userId,
+						status,
+						type,
+						pageable);
+
+		return convertToPageResponse(finePage);
 	}
+
+	private PageResponse<FineDTO> convertToPageResponse(Page<Fine> finePage) {
+
+		List<FineDTO> fineDTOs = finePage.getContent()
+						.stream()
+						.map(fineMapper::toDTO)
+						.collect(Collectors.toList());
+
+		return new PageResponse<>(
+						fineDTOs,
+						finePage.getNumber(),
+						finePage.getSize(),
+						finePage.getTotalElements(),
+						finePage.getTotalPages(),
+						finePage.isLast(),
+						finePage.isFirst(),
+						finePage.isEmpty()
+		);
+	}
+
 }

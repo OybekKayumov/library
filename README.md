@@ -170,6 +170,8 @@ add BookLoan
     post
     localhost:5000/api/book-loans/checkout
 
+add Fine
+
 
 # 📚 Library Management System
 
