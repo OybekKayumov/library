@@ -171,6 +171,9 @@ add BookLoan
     localhost:5000/api/book-loans/checkout
 
 add Fine
+    localhost:5000/api/fines
+    localhost:5000/api/fines/my
+    localhost:5000/api/fines/waive
 
 
 # 📚 Library Management System
