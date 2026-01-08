@@ -7,6 +7,7 @@ import com.ok.payload.request.BookLoanSearchRequest;
 import com.ok.payload.request.CheckinRequest;
 import com.ok.payload.request.CheckoutRequest;
 import com.ok.payload.request.RenewalRequest;
+import com.ok.payload.response.ApiResponse;
 import com.ok.payload.response.PageResponse;
 import com.ok.service.BookLoanService;
 import jakarta.validation.Valid;
@@ -87,6 +88,16 @@ public class BookLoanController {
 						bookLoanService.getBookLoans(searchRequest);
 
 		return ResponseEntity.ok(bookLoans);
+
+	}
+
+	@PostMapping("/admin/update-overdue")
+	public ResponseEntity<?> updateOverdueBookLoans() {
+
+		int updateCount = bookLoanService.updateOverdueBookLoan();
+
+		return ResponseEntity.ok(new ApiResponse(
+						"Overdue book loans are updated", true));
 
 	}
 
