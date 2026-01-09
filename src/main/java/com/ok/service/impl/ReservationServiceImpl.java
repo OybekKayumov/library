@@ -2,6 +2,7 @@ package com.ok.service.impl;
 
 import com.ok.domain.BookLoanStatus;
 import com.ok.domain.ReservationStatus;
+import com.ok.domain.UserRole;
 import com.ok.mapper.ReservationMapper;
 import com.ok.model.Book;
 import com.ok.model.Reservation;
@@ -91,8 +92,32 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 
 	@Override
-	public ReservationDTO cancelReservation(Long reservationId) {
-		return null;
+	public ReservationDTO cancelReservation(Long reservationId) throws Exception {
+
+		Reservation reservation = reservationRepo.findById(reservationId)
+						.orElseThrow(() -> new Exception("Reservation not found!"));
+
+		User currentUser = userService.getCurrentUser();
+
+		if (!reservation.getUser().equals(currentUser.getId()) &&
+					currentUser.getRole() != UserRole.ROLE_ADMIN) {
+
+			throw new Exception("You can only cancel your own reservations");
+		}
+
+		if (!reservation.canBeCancelled()) {
+
+			throw new Exception("Reservation can not be cancelled");
+		}
+
+		reservation.setStatus(ReservationStatus.CANCELLED);
+		reservation.setCancelledAt(LocalDateTime.now());
+
+		Reservation savedReservation = reservationRepo.save(reservation);
+
+		//updateQueuePositions(reservation.getBook().getId());
+
+		return reservationMapper.toDTO(savedReservation);
 	}
 
 	@Override
