@@ -30,6 +30,7 @@ public class Reservation {
 	@ManyToOne
 	private Book book;
 
+	@Enumerated(EnumType.STRING)
 	private ReservationStatus status = PENDING;
 
 	private LocalDateTime reservedAt;
