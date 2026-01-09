@@ -14,7 +14,7 @@ public interface ReservationService {
 
 	ReservationDTO cancelReservation(Long reservationId) throws Exception;
 
-	ReservationDTO fulfillReservation(Long reservationId);
+	ReservationDTO fulfillReservation(Long reservationId) throws Exception;
 
 	PageResponse<ReservationDTO> getMyReservations(
 					ReservationSearchRequest searchRequest);

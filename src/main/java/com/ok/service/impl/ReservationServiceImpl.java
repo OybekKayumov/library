@@ -8,12 +8,14 @@ import com.ok.model.Book;
 import com.ok.model.Reservation;
 import com.ok.model.User;
 import com.ok.payload.dto.ReservationDTO;
+import com.ok.payload.request.CheckoutRequest;
 import com.ok.payload.request.ReservationRequest;
 import com.ok.payload.request.ReservationSearchRequest;
 import com.ok.payload.response.PageResponse;
 import com.ok.repo.BookLoanRepo;
 import com.ok.repo.BookRepo;
 import com.ok.repo.ReservationRepo;
+import com.ok.service.BookLoanService;
 import com.ok.service.ReservationService;
 import com.ok.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class ReservationServiceImpl implements ReservationService {
 	private final BookRepo bookRepo;
 	private final ReservationRepo reservationRepo;
 	private final ReservationMapper reservationMapper;
+	private final BookLoanService bookLoanService;
 
 	int MAX_RESERVATIONS = 5;
 
@@ -121,8 +124,28 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 
 	@Override
-	public ReservationDTO fulfillReservation(Long reservationId) {
-		return null;
+	public ReservationDTO fulfillReservation(Long reservationId) throws Exception {
+
+		Reservation reservation = reservationRepo.findById(reservationId)
+						.orElseThrow(() -> new Exception("Reservation not found!"));
+
+		if (reservation.getBook().getAvailableCopies() <= 0 ) {
+
+			throw new Exception("Reservation is not available for pickup");
+		}
+
+		reservation.setStatus(ReservationStatus.FULFILLED);
+		reservation.setFulfilledAt(LocalDateTime.now());
+
+		Reservation savedReservation = reservationRepo.save(reservation);
+
+		CheckoutRequest request = new CheckoutRequest();
+		request.setBookId(reservation.getBook().getId());
+		request.setNotes("Assign Booked by Admin");
+
+		bookLoanService.checkoutBookForUser(reservation.getUser().getId(), request);
+
+		return reservationMapper.toDTO(savedReservation);
 	}
 
 	@Override
