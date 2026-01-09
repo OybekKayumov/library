@@ -55,7 +55,7 @@ It is designed as a **learning + production‑style project**, demonstrating cle
 
 | Layer | Technology |
 |-----|-----------|
-| Frontend | HTML, CSS (Vanilla) |
+| Frontend | HTML, CSS |
 | Backend | Java, Spring Boot |
 | Security | Spring Security, JWT |
 | Database | MySQL |
