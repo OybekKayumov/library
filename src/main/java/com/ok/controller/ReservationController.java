@@ -1,7 +1,10 @@
 package com.ok.controller;
 
+import com.ok.domain.ReservationStatus;
 import com.ok.payload.dto.ReservationDTO;
 import com.ok.payload.request.ReservationRequest;
+import com.ok.payload.request.ReservationSearchRequest;
+import com.ok.payload.response.PageResponse;
 import com.ok.service.ReservationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -55,4 +58,29 @@ public class ReservationController {
 
 		return ResponseEntity.ok(reservation);
 	}
+
+	@GetMapping("/my")
+	public ResponseEntity<PageResponse<ReservationDTO>> getMyReservations(
+					@RequestParam(required = false) ReservationStatus status,
+					@RequestParam(required = false) boolean activeOnly,
+					@RequestParam(defaultValue = "0") int page,
+					@RequestParam(defaultValue = "20") int size,
+					@RequestParam(defaultValue = "reservedAt") String sortBy,
+					@RequestParam(defaultValue = "DESC") String sortDirection) throws Exception {
+
+
+		ReservationSearchRequest searchRequest = new ReservationSearchRequest();
+		searchRequest.setStatus(status);
+		searchRequest.setActiveOnly(activeOnly);
+		searchRequest.setPage(page);
+		searchRequest.setSize(size);
+		searchRequest.setSortBy(sortBy);
+		searchRequest.setSortDirection(sortDirection);
+
+		PageResponse<ReservationDTO> reservations =
+						reservationService.getMyReservations(searchRequest);
+
+		return ResponseEntity.ok(reservations);
+	}
+
 }
