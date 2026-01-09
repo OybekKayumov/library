@@ -1,88 +1,81 @@
 # 📖 Library Management System
 
-A full-stack **Java + MySQL** web application for managing a modern library.
-The system covers book inventory, borrowing workflows, subscriptions,
-payments, reviews, and role-based access control using JWT.
+A **full‑stack Library Management System** built with **Java, Spring Boot, and MySQL**.  
+The project simulates a real‑world library platform with book inventory, subscriptions, payments, security, and user management.
 
-This project demonstrates **real-world backend architecture**, secure
-authentication, and scalable CRUD design suitable for production use.
+It is designed as a **learning + production‑style project**, demonstrating clean architecture, REST APIs, JWT authentication, and role‑based access control.
 
 ---
 
-## 🎯 What This Project Covers
+## ✨ What You Will Build
 
-✔ Complete **Book Inventory Management**  
-✔ **Hierarchical Genres** (parent → child, unlimited depth)  
-✔ **Borrow / Return Workflow** with due dates & renewals  
-✔ **Reservation & Hold Queue** for unavailable books  
-✔ **Automatic Overdue Fines** (partial & full payments)  
-✔ **Subscription Plans & Membership Control**  
-✔ **Verified Book Reviews & Ratings**  
-✔ **Wishlist Management**  
-✔ **Admin Dashboard & Analytics**  
-✔ **JWT Authentication + Google Login**  
-✔ **Payment Gateway Integration (Razorpay ready)**  
+- 📚 Complete **Book Inventory Management**
+- 🗂️ **Hierarchical Genres** (parent → child → unlimited depth)
+- 🔄 Book **Borrowing & Returns** with due dates
+- ⏳ **Reservation / Hold Queue** for unavailable books
+- 💰 Automatic **Overdue Fines** (partial & full payments)
+- 💳 **Subscription Plans & Membership Control**
+- ⭐ Verified **Book Reviews & Ratings**
+- ❤️ **Wishlist** feature
+- 📊 **Admin Dashboard & Analytics**
+- 🔐 **JWT Authentication** + Role‑based Authorization
+- 🌐 Google Login (OAuth)
+- 💸 Payment Gateway Integration (Razorpay)
 
 ---
 
-## ✨ Key Features
+## 🔐 Core Features
 
-### 🔐 Authentication & Security
-- JWT-based authentication
-- Role-based access (USER / ADMIN)
-- Secure endpoints with Spring Security
+### 👤 User & Security
+- JWT‑based authentication
+- Role‑based access (USER / ADMIN)
+- Secure signup & login
+- Protected API endpoints
 
-### 📚 Library Operations
-- Add, update, delete books
-- Track available & borrowed copies
-- Genre hierarchy with parent/child relations
-
-### 🔄 Borrowing & Reservations
-- Checkout & return books
-- Reservation queue system
-- Auto status updates
+### 📚 Library Management
+- Add / update / delete books
+- Genre management (tree structure)
+- Book availability tracking
+- Borrow, return, and renew books
 
 ### 💳 Subscriptions & Payments
-- Subscription plans (Basic, Premium, etc.)
-- Active / expired subscription tracking
-- Payment & activation flow
+- Multiple subscription plans
+- Auto‑renewal support
+- Payment tracking
+- Active / expired subscriptions
 
-### ⭐ User Engagement
-- Wishlist
-- Reviews & ratings (verified readers only)
-- User profile management
-
----
-
-## 🧰 Tech Stack
-
-| Layer        | Technology |
-|--------------|------------|
-| Frontend     | HTML, CSS (Vanilla) |
-| Backend      | Java, Spring Boot |
-| Security     | Spring Security, JWT |
-| Database     | MySQL |
-| Server       | Tomcat |
-| Tools        | Git, GitHub, Postman |
+### 🧾 Engagement
+- Book reviews & ratings
+- Wishlist management
+- Reservation system
 
 ---
 
-## 🔌 API Examples (Postman)
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-----|-----------|
+| Frontend | HTML, CSS (Vanilla) |
+| Backend | Java, Spring Boot |
+| Security | Spring Security, JWT |
+| Database | MySQL |
+| Server | Tomcat |
+| Tools | Git, GitHub, Postman |
+
+---
+
+## 🔌 API Usage (Postman Examples)
 
 ### 📂 Genres
 
-**Get**
-```http
+**GET**
+```
 GET /api/genres
 GET /api/genres/top-level
 GET /api/genres/{id}
 ```
 
-**Create**
-```http
-POST /api/genres/create
-```
-
+**POST – Create Genre**
 ```json
 {
   "code": "Fiction",
@@ -94,15 +87,29 @@ POST /api/genres/create
 }
 ```
 
+**PUT – Update Genre**
+```json
+{
+  "id": 1,
+  "code": "Non-Fiction",
+  "name": "Non-Fiction",
+  "description": "Educational & real stories",
+  "displayOrder": 1,
+  "active": true
+}
+```
+
+**DELETE**
+```
+DELETE /api/genres/{id}        (soft delete)
+DELETE /api/genres/{id}/hard   (hard delete)
+```
+
 ---
 
 ### 📘 Books
 
-**Create Book**
-```http
-POST /api/books
-```
-
+**POST – Create Book**
 ```json
 {
   "isbn": "978-3-16-148410-0",
@@ -117,30 +124,141 @@ POST /api/books
   "totalCopies": 1,
   "availableCopies": 1,
   "price": 499.99,
-  "coverImageUrl": "https://images.pexels.com",
   "active": true
+}
+```
+
+**GET**
+```
+GET /api/books
+GET /api/books/{id}
+```
+
+---
+
+### 🔑 Authentication
+
+```
+POST /auth/signup
+POST /auth/login
+```
+
+```json
+{
+  "email": "testtest@gmail.com",
+  "password": "testtest"
 }
 ```
 
 ---
 
-## 🧪 Run Locally
+### 💳 Subscription Plans
 
-1. Clone the repository
-2. Import database schema from `sql/database.sql`
-3. Configure DB credentials in `application.properties`
-4. Run the application
-5. Open http://localhost:5000
+```
+GET  /api/subscription-plans
+POST /api/subscription-plans/admin/create
+PUT  /api/subscription-plans/admin/{id}
+```
+
+**Example Plan**
+```json
+{
+  "planCode": "PREMIUM_90",
+  "name": "Premium 90 Days",
+  "description": "Full access with higher limits",
+  "durationDays": 90,
+  "price": 1299.00,
+  "currency": "USD",
+  "maxBooksAllowed": 20,
+  "maxDaysPerBook": 15,
+  "isActive": true
+}
+```
 
 ---
 
-## 🔑 Default Admin Credentials
+### 🔁 Subscriptions
 
-Username: admin  
-Password: testtest
+**Subscribe (JWT required)**
+```
+POST /api/subscriptions/subscribe
+```
+
+```json
+{
+  "planId": 2,
+  "startDate": "2026-01-01",
+  "autoRenew": true,
+  "notes": "First-time subscription"
+}
+```
+
+```
+GET /api/subscriptions/user/active
+GET /api/subscriptions/admin
+```
 
 ---
 
-## 📜 License
+### 💰 Payments, Loans & More
 
-MIT License
+```
+GET  /api/payments
+POST /api/book-loans/checkout
+GET  /api/fines
+GET  /api/fines/my
+POST /api/reservations
+POST /api/wishlist
+POST /api/reviews
+```
+
+---
+
+## 📸 Screenshots
+
+> Sample UI views of the system
+
+![Dashboard](screenshots/dashboard.png)
+
+---
+
+## 🧪 How to Run Locally
+
+1. Install **Java 17+** and **MySQL** (XAMPP recommended)
+2. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/library.git
+   ```
+3. Import database schema from `sql/database.sql`
+4. Update `application.properties`
+5. Run the Spring Boot application
+6. Open browser:
+   ```
+   http://localhost:5000
+   ```
+
+---
+
+## 🛡️ Default Admin Credentials
+
+```
+Username: admin
+Password: admin123
+```
+
+---
+
+## 📌 Notes
+
+- All IDs use `Long`
+- JWT is required for protected APIs
+- Prices are stored as numeric values
+
+---
+
+## ⭐ Contribution
+
+Feel free to fork this repository, submit issues, or open pull requests.
+
+Happy coding 🚀
+
