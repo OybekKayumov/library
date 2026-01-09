@@ -58,12 +58,14 @@ public class WishlistServiceImpl implements WishlistService {
 
 		User user = userService.getCurrentUser();
 
-		if (!wishlistRepo.existsByUserIdAndBookId(user.getId(), bookId)) {
+		Wishlist wishlist = wishlistRepo.findByUserIdAndBookId(user.getId(), bookId);
+
+		if (wishlist == null) {
 
 			throw new Exception("Book not found");
 		}
 
-		wishlistRepo.deleteByUserIdAndBookId(user.getId(), bookId);
+		wishlistRepo.delete(wishlist);
 
 	}
 
