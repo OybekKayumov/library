@@ -198,7 +198,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 	private Pageable createPageable(ReservationSearchRequest searchRequest) {
 
-		Sort sort = "ASC".equalsIgnoreCase(searchRequest.setSortDirection()
+		Sort sort = "ASC".equalsIgnoreCase(searchRequest.getSortDirection())
 						? Sort.by(searchRequest.getSortBy()).ascending()
 						: Sort.by(searchRequest.getSortBy()).descending();
 
