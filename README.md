@@ -1,278 +1,146 @@
-# 📚 Library Management System
+# 📖 Library Management System
 
-A full-stack Java + MySQL web application to manage book inventory,
-borrowing activity, reservations, reviews, admin access control, and 
-others.
-This project demonstrates real-world CRUD operations, secure login, and
-JWT-based workflows in a self-contained library system.
+A full-stack **Java + MySQL** web application for managing a modern library.
+The system covers book inventory, borrowing workflows, subscriptions,
+payments, reviews, and role-based access control using JWT.
 
----
-
----
-    🚀 What You’ll Build in This Course
-
-    ✔ Complete Book Management System with inventory tracking
-    ✔ Hierarchical Genre Module (parent → child → unlimited depth)
-    ✔ Book Borrowing & Returns with due dates & renewals
-    ✔ Reservation / Hold Queue System for unavailable books
-    ✔ Automatic Overdue Fines with partial & full payments
-    ✔ Subscription Plans & Membership Control
-    ✔ Book Reviews & Ratings (verified readers only)
-    ✔ Wishlist System
-    ✔ Admin Analytics & Statistics Dashboard
-    ✔ Authentication with JWT + Google Login
-    ✔ Real Razorpay Payment Gateway Integration
----
-
-## 🔧 Features
-
-- 🔐 Admin login/logout system (session-based)
-  - ➕ Add new books to the inventory
-  - 📖 View books with author, genre & date
-  - 📦 Reservation books
-  - 📥 Return books and mark as available
-  - 📋 Subscription plans
-  - 📊 Wishlist
-  - 🌓 Automatic Overdue Fines
-  - 📱 Book Reviews & Ratings
-  - 🚀 Authentication with JWT + Google Login
+This project demonstrates **real-world backend architecture**, secure
+authentication, and scalable CRUD design suitable for production use.
 
 ---
 
-## 🛠️ Tech Stack
+## 🎯 What This Project Covers
 
-  - **Frontend:** HTML, CSS (vanilla)
-  - **Backend:** Java, Spring 4.x
-  - **Database:** MySQL
-  - **Local Server:** Tomcat
-  - **Version Control:** Git + GitHub
-
----
-
-## postman examples:
-
-add Genres
-
-    get
-        localhost:5000/api/genres
-        localhost:5000/api/genres/top-level
-        localhost:5000/api/genres/1
-
-    post
-        localhost:5000/api/genres/create
-        {    
-        "code": "Fiction",
-        "name": "Fiction",
-        "description": "Suspene & investigation stories",
-        "displayOrder": 1,
-        "active": true,
-        "parentGenreId": null
-        }
-
-    post GenreDTO
-        localhost:5000/api/genres/create
-        {    
-            "code": "Mystery",
-            "name": "Mystery",
-            "description": "Suspene & investigation stories",
-            "displayOrder": 1,
-            "active": true,
-            "parentGenreId": 1
-        }
-
-    put - update
-        localhost:5000/api/genres/1
-        {
-        "id": 1,
-        "code": "Non-Fiction",
-        "name": "Non-Fiction",
-        "description": "Suspene & investigation stories",
-        "displayOrder": 1,
-        "active": true,
-        "parentGenreId": null,
-        "parentGenreName": null,
-        "subGenre": null,
-        "bookCount": null,
-        "createdAt": "2025-12-28T11:10:48.529412",
-        "updatedAt": "2025-12-28T11:10:48.529412"
-        }
-
-    delete 
-    soft
-        localhost:5000/api/genres/2
-    hard
-        localhost:5000/api/genres/2/hard
-
-create a Book
-
-        localhost:5000/api/books
-        {    
-            "isbn": "978-3-16-148410-0",
-            "title": "The Art of Java Development",
-            "author": "John Doe",
-            "genreId": 1,
-            "publisher": "Mir",
-            "publicationDate": "2023-05-15",
-            "language": "English",
-            "pages": 420,    
-            "description": "A coomprehensive guide to mastering Java ...",
-            "totalCopies": 1,
-            "availableCopies": 1,
-            "price": 499.99,
-            "coverImageUrl": "https://images.pexels.com",
-            "active": true    
-        }
-
-    get all Books
-        localhost:5000/api/books
-
-    get a Book by Id
-        localhost:5000/api/books/1
-
-    put - update the Book
-        localhost:5000/api/books/1
-
-add spring security
-
-add User
-
-add JWT token
-
-add admin role
-
-    localhost:5000/auth/signup
-    localhost:5000/auth/login
-        {       
-        "email": "testtest@gmail.com",    
-        "password": "testtest"    
-        }
-
-    localhost:5000/api/admin/books
-
-add User Service
-
-    localhost:5000/api/users/profile
-
-add Subscription Plan
-    
-    localhost:5000/api/subscription-plans
-
-    localhost:5000/api/subscription-plans/admin/create
-
-        {
-        "planCode": "BASIC_30",
-        "name": "Basic 30 Days plan",
-        "description": "Access to basic features ...",
-        "durationDays": 30,
-        "price": 499.00,    
-        "maxBooksAllowed": 5,
-        "maxDaysPerBook": 7,
-        "displayOrder": 1,
-        "isActive": true,
-        "isFeatured": false,
-        "badgeText": "Popular",
-        "adminNotes": "Entry-level subscription plan"
-        }
-
-        {
-        "planCode": "PREMIUM_90",
-        "name": "Premium 90 Days plan",
-        "description": "Full access with higher limits",
-        "durationDays": 90,
-        "price": 1299.00,
-        "currency": "USD",    
-        "maxBooksAllowed": 20,
-        "maxDaysPerBook": 15,
-        "displayOrder": 2,
-        "isActive": true,
-        "isFeatured": false,
-        "badgeText": "Best Value",
-        "adminNotes": "Recommended plan"
-        }
-
-    update
-    localhost:5000/api/subscription-plans/admin/1
-
-add Subscription
-
-    post - Bearer Token - {{jwt}}
-    localhost:5000/api/subscriptions/subscribe
-        {
-        "planId": 2,
-        "startDate": "2026-01-01",
-        "autorenew": true,
-        "notes": "First-time subscription"
-        }
-    
-    get all subscriptions
-    localhost:5000/api/subscriptions/admin
-
-    activate subscription
-    localhost:5000/api/subscriptions/activate?subscriptionId=102&paymentId=1
-
-    get
-    localhost:5000/api/subscriptions/user/active
-
-add Payments
-
-    get all Payments
-    localhost:5000/api/payments
-
-add BookLoan
-
-    post
-    localhost:5000/api/book-loans/checkout
-
-add Fine
-
-    localhost:5000/api/fines
-    localhost:5000/api/fines/my
-    localhost:5000/api/fines/waive
-
-add Reservation
-
-    localhost:5000/api/reservations
-
-add Wishlist
-
-    localhost:5000/api/wishlist
-
-add BookReview
-
-    localhost:5000/api/reviews
+✔ Complete **Book Inventory Management**  
+✔ **Hierarchical Genres** (parent → child, unlimited depth)  
+✔ **Borrow / Return Workflow** with due dates & renewals  
+✔ **Reservation & Hold Queue** for unavailable books  
+✔ **Automatic Overdue Fines** (partial & full payments)  
+✔ **Subscription Plans & Membership Control**  
+✔ **Verified Book Reviews & Ratings**  
+✔ **Wishlist Management**  
+✔ **Admin Dashboard & Analytics**  
+✔ **JWT Authentication + Google Login**  
+✔ **Payment Gateway Integration (Razorpay ready)**  
 
 ---
 
+## ✨ Key Features
 
+### 🔐 Authentication & Security
+- JWT-based authentication
+- Role-based access (USER / ADMIN)
+- Secure endpoints with Spring Security
 
-## 📸 Screenshots
+### 📚 Library Operations
+- Add, update, delete books
+- Track available & borrowed copies
+- Genre hierarchy with parent/child relations
 
-> 📌 _Here are a few screenshots to give you a glimpse of the application:_
+### 🔄 Borrowing & Reservations
+- Checkout & return books
+- Reservation queue system
+- Auto status updates
 
-### Dashboard
-![Dashboard showing book stats](screenshots/dashboard.png)
+### 💳 Subscriptions & Payments
+- Subscription plans (Basic, Premium, etc.)
+- Active / expired subscription tracking
+- Payment & activation flow
+
+### ⭐ User Engagement
+- Wishlist
+- Reviews & ratings (verified readers only)
+- User profile management
 
 ---
 
-## 🧪 How to Run Locally
+## 🧰 Tech Stack
 
-1.  Install [Test](https://www.) or [XAMPP](https://www.)
-2.  Clone the repository:
-    ```bash
-    git clone [https://github.com/*/library.git]
-    (https://github.com/*/library.git)
-    ```
-3.  Move the project folder to your * `docs` or * `docs` directory.
-4.  Start Java & MySQL from *.
-5.  Import the SQL schema from `sql/database.sql` into MyAdmin.
-6.  Visit: `http://localhost:5000`
-    (Login with default credentials: `root` / `testtest` unless 
-    changed.)
+| Layer        | Technology |
+|--------------|------------|
+| Frontend     | HTML, CSS (Vanilla) |
+| Backend      | Java, Spring Boot |
+| Security     | Spring Security, JWT |
+| Database     | MySQL |
+| Server       | Tomcat |
+| Tools        | Git, GitHub, Postman |
 
-### 🛡️ Admin Credentials
+---
 
-**Default:**
-```makefile
+## 🔌 API Examples (Postman)
 
-Username: username
-Password: password
+### 📂 Genres
+
+**Get**
+```http
+GET /api/genres
+GET /api/genres/top-level
+GET /api/genres/{id}
+```
+
+**Create**
+```http
+POST /api/genres/create
+```
+
+```json
+{
+  "code": "Fiction",
+  "name": "Fiction",
+  "description": "Suspense & investigation stories",
+  "displayOrder": 1,
+  "active": true,
+  "parentGenreId": null
+}
+```
+
+---
+
+### 📘 Books
+
+**Create Book**
+```http
+POST /api/books
+```
+
+```json
+{
+  "isbn": "978-3-16-148410-0",
+  "title": "The Art of Java Development",
+  "author": "John Doe",
+  "genreId": 1,
+  "publisher": "Mir",
+  "publicationDate": "2023-05-15",
+  "language": "English",
+  "pages": 420,
+  "description": "A comprehensive guide to mastering Java",
+  "totalCopies": 1,
+  "availableCopies": 1,
+  "price": 499.99,
+  "coverImageUrl": "https://images.pexels.com",
+  "active": true
+}
+```
+
+---
+
+## 🧪 Run Locally
+
+1. Clone the repository
+2. Import database schema from `sql/database.sql`
+3. Configure DB credentials in `application.properties`
+4. Run the application
+5. Open http://localhost:5000
+
+---
+
+## 🔑 Default Admin Credentials
+
+Username: admin  
+Password: testtest
+
+---
+
+## 📜 License
+
+MIT License
