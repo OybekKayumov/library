@@ -5,7 +5,7 @@ import com.ok.payload.response.PageResponse;
 
 public interface WishlistService {
 
-	WishlistDTO addToWishlist(Long bookId, String notes);
+	WishlistDTO addToWishlist(Long bookId, String notes) throws Exception;
 
 	void removeFromWishlist(Long bookId);
 

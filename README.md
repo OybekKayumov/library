@@ -178,6 +178,7 @@ add Fine
 add Reservation
     localhost:5000/api/reservations
 
+add Wishlist
 
 # 📚 Library Management System
 
