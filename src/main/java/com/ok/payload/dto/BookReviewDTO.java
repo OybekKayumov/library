@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @Builder
 public class BookReviewDTO {
 
+	private Long id;
+
 	@NotNull(message = "User ID is mandatory!")
 	private Long userId;
 

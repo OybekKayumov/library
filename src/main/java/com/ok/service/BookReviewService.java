@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
 
 public interface BookReviewService {
 
-	BookReviewDTO createReview(CreateReviewRequest request);
+	BookReviewDTO createReview(CreateReviewRequest request) throws Exception;
 
 	BookReviewDTO updateReview(Long reviewId, UpdateReviewRequest request);
 
