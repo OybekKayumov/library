@@ -181,6 +181,9 @@ add Reservation
 add Wishlist
     localhost:5000/api/wishlist
 
+add BookReview
+
+
 # 📚 Library Management System
 
 A full-stack Java + MySQL web application to manage book inventory, 
