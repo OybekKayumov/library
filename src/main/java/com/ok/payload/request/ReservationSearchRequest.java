@@ -1,5 +1,6 @@
 package com.ok.payload.request;
 
+import com.ok.domain.ReservationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,8 @@ public class ReservationSearchRequest {
 	private Long userId;
 
 	private Long bookId;
+
+	private ReservationStatus status;
 
 	private Boolean activeOnly;
 

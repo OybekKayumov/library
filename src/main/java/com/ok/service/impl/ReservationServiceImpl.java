@@ -19,10 +19,15 @@ import com.ok.service.BookLoanService;
 import com.ok.service.ReservationService;
 import com.ok.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.IllegalFormatCodePointException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -150,11 +155,54 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public PageResponse<ReservationDTO> getMyReservations(ReservationSearchRequest searchRequest) {
+
+
 		return null;
 	}
 
 	@Override
 	public PageResponse<ReservationDTO> searchReservations(ReservationSearchRequest searchRequest) {
-		return null;
+
+		Pageable pageable = createPageable(searchRequest);
+
+		Page<Reservation> reservationPage =
+						reservationRepo.searchReservationsWithFilters(
+										searchRequest.getUserId(),
+										searchRequest.getBookId(),
+										searchRequest.getStatus(),
+										searchRequest.getActiveOnly() != null
+											 ? searchRequest.getActiveOnly() : false,
+										pageable
+						) ;
+
+		return buildPageResponse(reservationPage);
+	}
+
+	private PageResponse<ReservationDTO> buildPageResponse(Page<Reservation> reservationPage) {
+
+		List<ReservationDTO> dtos = reservationPage.getContent().stream()
+						.map(reservationMapper::toDTO)
+						.toList();
+
+		PageResponse<ReservationDTO> response = new PageResponse<>();
+		response.setContent(dtos);
+		response.setPageNumber(reservationPage.getNumber());
+		response.setPageSize(reservationPage.getSize());
+		response.setTotalPages(reservationPage.getTotalPages());
+		response.setTotalElements(reservationPage.getTotalElements());
+		response.setLast(reservationPage.isLast());
+
+		return response;
+
+	}
+
+	private Pageable createPageable(ReservationSearchRequest searchRequest) {
+
+		Sort sort = "ASC".equalsIgnoreCase(searchRequest.setSortDirection()
+						? Sort.by(searchRequest.getSortBy()).ascending()
+						: Sort.by(searchRequest.getSortBy()).descending();
+
+		return PageRequest.of(searchRequest.getPage(), searchRequest.getSize(),
+						sort);
 	}
 }
