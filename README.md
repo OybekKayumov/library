@@ -163,22 +163,27 @@ add Subscription
     localhost:5000/api/subscriptions/user/active
 
 add Payments
+
     get all Payments
     localhost:5000/api/payments
 
 add BookLoan
+
     post
     localhost:5000/api/book-loans/checkout
 
 add Fine
+
     localhost:5000/api/fines
     localhost:5000/api/fines/my
     localhost:5000/api/fines/waive
 
 add Reservation
+
     localhost:5000/api/reservations
 
 add Wishlist
+
     localhost:5000/api/wishlist
 
 add BookReview

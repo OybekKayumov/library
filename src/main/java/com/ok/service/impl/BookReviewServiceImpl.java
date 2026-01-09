@@ -78,12 +78,25 @@ public class BookReviewServiceImpl implements BookReviewService {
 	}
 
 	@Override
-	public void deleteReview(Long reviewId) {
+	public void deleteReview(Long reviewId) throws Exception {
 
+		User currentUser = userService.getCurrentUser();
+
+		BookReview bookReview = bookReviewRepo.findById(reviewId)
+						.orElseThrow(() -> new Exception("Review not found"));
+
+		if (!bookReview.getUser().getId().equals(currentUser.getId())) {
+			throw new Exception("You can only delete your owns reviews") ;
+		}
+
+		bookReviewRepo.delete(bookReview);
 	}
 
 	@Override
 	public PageResponse<BookReviewDTO> getReviewsByBookId(Long id, int page, int size) {
+
+
+
 		return null;
 	}
 

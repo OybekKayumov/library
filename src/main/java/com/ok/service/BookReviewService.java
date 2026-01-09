@@ -12,7 +12,7 @@ public interface BookReviewService {
 
 	BookReviewDTO updateReview(Long reviewId, UpdateReviewRequest request) throws Exception;
 
-	void deleteReview(Long reviewId);
+	void deleteReview(Long reviewId) throws Exception;
 
 	PageResponse<BookReviewDTO> getReviewsByBookId(Long id, int page, int size);
 }
