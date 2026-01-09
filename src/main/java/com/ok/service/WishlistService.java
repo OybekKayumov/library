@@ -7,8 +7,8 @@ public interface WishlistService {
 
 	WishlistDTO addToWishlist(Long bookId, String notes) throws Exception;
 
-	void removeFromWishlist(Long bookId);
+	void removeFromWishlist(Long bookId) throws Exception;
 
-	PageResponse<WishlistDTO> getMyWishlist(int page, int size);
+	PageResponse<WishlistDTO> getMyWishlist(int page, int size) throws Exception;
 
 }
