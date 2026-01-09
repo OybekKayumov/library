@@ -10,7 +10,7 @@ public interface BookReviewService {
 
 	BookReviewDTO createReview(CreateReviewRequest request) throws Exception;
 
-	BookReviewDTO updateReview(Long reviewId, UpdateReviewRequest request);
+	BookReviewDTO updateReview(Long reviewId, UpdateReviewRequest request) throws Exception;
 
 	void deleteReview(Long reviewId);
 

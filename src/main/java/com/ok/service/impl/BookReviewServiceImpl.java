@@ -1,5 +1,6 @@
 package com.ok.service.impl;
 
+import com.ok.mapper.BookReviewMapper;
 import com.ok.model.Book;
 import com.ok.model.BookReview;
 import com.ok.model.User;
@@ -21,6 +22,7 @@ public class BookReviewServiceImpl implements BookReviewService {
 	private final BookReviewRepo bookReviewRepo;
 	private final UserService userService;
 	private final BookRepo bookRepo;
+	private final BookReviewMapper bookReviewMapper;
 
 	@Override
 	public BookReviewDTO createReview(CreateReviewRequest request) throws Exception {
@@ -50,12 +52,29 @@ public class BookReviewServiceImpl implements BookReviewService {
 
 		BookReview savedBookReview = bookReviewRepo.save(bookReview);
 
-		return null;
+		return bookReviewMapper.toDTO(savedBookReview);
 	}
 
 	@Override
-	public BookReviewDTO updateReview(Long reviewId, UpdateReviewRequest request) {
-		return null;
+	public BookReviewDTO updateReview(Long reviewId, UpdateReviewRequest request) throws Exception {
+
+		User user = userService.getCurrentUser();
+
+		BookReview bookReview = bookReviewRepo.findById(reviewId)
+						.orElseThrow(() -> new Exception("Review not found"));
+
+		if (!bookReview.getUser().getId().equals(user.getId())) {
+
+			throw new Exception("You have not reviewed this book") ;
+		}
+
+		bookReview.setReviewText(request.getReviewText());
+		bookReview.setTitle(request.getTitle());
+		bookReview.setRating(request.getRating());
+
+		BookReview savedBookReview = bookReviewRepo.save(bookReview);
+
+		return bookReviewMapper.toDTO(savedBookReview);
 	}
 
 	@Override
