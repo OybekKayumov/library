@@ -1,8 +1,58 @@
-Library Management System
+# 📚 Library Management System
 
-java full-stack project
+A full-stack Java + MySQL web application to manage book inventory,
+borrowing activity, reservations, reviews, admin access control, and 
+others.
+This project demonstrates real-world CRUD operations, secure login, and
+JWT-based workflows in a self-contained library system.
 
-postman:
+---
+
+---
+    🚀 What You’ll Build in This Course
+
+    ✔ Complete Book Management System with inventory tracking
+    ✔ Hierarchical Genre Module (parent → child → unlimited depth)
+    ✔ Book Borrowing & Returns with due dates & renewals
+    ✔ Reservation / Hold Queue System for unavailable books
+    ✔ Automatic Overdue Fines with partial & full payments
+    ✔ Subscription Plans & Membership Control
+    ✔ Book Reviews & Ratings (verified readers only)
+    ✔ Wishlist System
+    ✔ Admin Analytics & Statistics Dashboard
+    ✔ Authentication with JWT + Google Login
+    ✔ Real Razorpay Payment Gateway Integration
+---
+
+## 🔧 Features
+
+- 🔐 Admin login/logout system (session-based)
+  - ➕ Add new books to the inventory
+  - 📖 View books with author, genre & date
+  - 📦 Reservation books
+  - 📥 Return books and mark as available
+  - 📋 Subscription plans
+  - 📊 Wishlist
+  - 🌓 Automatic Overdue Fines
+  - 📱 Book Reviews & Ratings
+  - 🚀 Authentication with JWT + Google Login
+
+---
+
+## 🛠️ Tech Stack
+
+  - **Frontend:** HTML, CSS (vanilla)
+  - **Backend:** Java, Spring 4.x
+  - **Database:** MySQL
+  - **Local Server:** Tomcat
+  - **Version Control:** Git + GitHub
+
+---
+
+## postman examples:
+
+add Genres
+
     get
         localhost:5000/api/genres
         localhost:5000/api/genres/top-level
@@ -53,7 +103,8 @@ postman:
     hard
         localhost:5000/api/genres/2/hard
 
-    create a Book
+create a Book
+
         localhost:5000/api/books
         {    
             "isbn": "978-3-16-148410-0",
@@ -188,40 +239,11 @@ add Wishlist
 
 add BookReview
 
-
-# 📚 Library Management System
-
-A full-stack Java + MySQL web application to manage book inventory, 
-borrowing activity, returns, and admin access control. 
-This project demonstrates real-world CRUD operations, secure login, and 
-session-based workflows in a self-contained library system.
+    localhost:5000/api/reviews
 
 ---
 
-## 🔧 Features
 
-- 🔐 Admin login/logout system (session-based)
-- ➕ Add new books to the inventory
-- 📖 View books with author, genre & date
-- 📦 Issue books to students
-- 📥 Return books and mark as available
-- 📋 View issued logs with real-time status (Issued/Returned)
-- 📊 Dashboard with total, issued & returned book stats
-- 🌓 Dark mode toggle
-- 📱 Mobile responsive layout
-- 🚀 Optional deployment using 
-
----
-
-## 🛠️ Tech Stack
-
-- **Frontend:** HTML, CSS (vanilla)
-- **Backend:** Java, Spring 4.x
-- **Database:** MySQL (via MyAdmin)
-- **Local Server:** Tomcat
-- **Version Control:** Git + GitHub
-
----
 
 ## 📸 Screenshots
 
@@ -251,5 +273,6 @@ session-based workflows in a self-contained library system.
 
 **Default:**
 ```makefile
-Username: root
-Password: testtest
+
+Username: username
+Password: password

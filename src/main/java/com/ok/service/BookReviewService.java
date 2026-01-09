@@ -14,5 +14,5 @@ public interface BookReviewService {
 
 	void deleteReview(Long reviewId) throws Exception;
 
-	PageResponse<BookReviewDTO> getReviewsByBookId(Long id, int page, int size);
+	PageResponse<BookReviewDTO> getReviewsByBookId(Long id, int page, int size) throws Exception;
 }

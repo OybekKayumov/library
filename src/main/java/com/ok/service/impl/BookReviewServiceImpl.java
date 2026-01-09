@@ -1,19 +1,29 @@
 package com.ok.service.impl;
 
+import com.ok.domain.BookLoanStatus;
 import com.ok.mapper.BookReviewMapper;
 import com.ok.model.Book;
+import com.ok.model.BookLoan;
 import com.ok.model.BookReview;
 import com.ok.model.User;
 import com.ok.payload.dto.BookReviewDTO;
 import com.ok.payload.request.CreateReviewRequest;
 import com.ok.payload.request.UpdateReviewRequest;
 import com.ok.payload.response.PageResponse;
+import com.ok.repo.BookLoanRepo;
 import com.ok.repo.BookRepo;
 import com.ok.repo.BookReviewRepo;
 import com.ok.service.BookReviewService;
 import com.ok.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +33,7 @@ public class BookReviewServiceImpl implements BookReviewService {
 	private final UserService userService;
 	private final BookRepo bookRepo;
 	private final BookReviewMapper bookReviewMapper;
+	private final BookLoanRepo bookLoanRepo;
 
 	@Override
 	public BookReviewDTO createReview(CreateReviewRequest request) throws Exception {
@@ -93,14 +104,47 @@ public class BookReviewServiceImpl implements BookReviewService {
 	}
 
 	@Override
-	public PageResponse<BookReviewDTO> getReviewsByBookId(Long id, int page, int size) {
+	public PageResponse<BookReviewDTO> getReviewsByBookId(Long id, int page, int size) throws Exception {
 
+		Book book = bookRepo.findById(id)
+						.orElseThrow(() -> new Exception("Book not found by id!"));
 
+		Pageable pageable = PageRequest.of(
+						page, size, Sort.by("createdAt").descending());
 
-		return null;
+		Page<BookReview> reviewPage = bookReviewRepo.findByBook(book, pageable);
+
+		return convertToPageResponse(reviewPage);
+	}
+
+	private PageResponse<BookReviewDTO> convertToPageResponse(Page<BookReview> reviewPage) {
+
+		List<BookReviewDTO> reviewDTOs = reviewPage.getContent()
+						.stream()
+						.map(bookReviewMapper::toDTO)
+						.collect(Collectors.toList());
+
+		return new PageResponse<>(
+						reviewDTOs,
+						reviewPage.getNumber(),
+						reviewPage.getSize(),
+						reviewPage.getTotalElements(),
+						reviewPage.getTotalPages(),
+						reviewPage.isLast(),
+						reviewPage.isFirst(),
+						reviewPage.isEmpty()
+		);
+
 	}
 
 	private boolean hasUserReadBook(Long userId, Long bookId) {
-		return false;
+
+		List<BookLoan> bookLoans = bookLoanRepo.findByBookId(bookId);
+
+		return bookLoans
+						.stream()
+						.anyMatch(bookLoan -> bookLoan.getUser().getId().equals(userId)
+						&& bookLoan.getStatus() == BookLoanStatus.RETURNED);
 	}
+
 }
