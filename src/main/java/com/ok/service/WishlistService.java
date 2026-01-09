@@ -1,0 +1,14 @@
+package com.ok.service;
+
+import com.ok.payload.dto.WishlistDTO;
+import com.ok.payload.response.PageResponse;
+
+public interface WishlistService {
+
+	WishlistDTO addToWishlist(Long bookId, String notes);
+
+	void removeFromWishlist(Long bookId);
+
+	PageResponse<WishlistDTO> getMyWishlist(int page, int size);
+
+}
